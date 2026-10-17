@@ -164,9 +164,9 @@ td.fr{color:var(--ok);font-weight:700}
     <a href="#resumo">Resumo</a>
     <a href="#metodo">Método</a>
     <a href="#piloto">Piloto real</a>
-    <a href="#calculos">Cálculos</a>
     <a href="#alocacao">Alocação</a>
     <a href="#robustez">Robustez</a>
+    <a href="#calculos">Cálculos</a>
     <a href="#glossario">Glossário</a>
     <a href="#referencial">Referencial</a>
     <a href="#perguntas">Perguntas</a>
@@ -271,16 +271,7 @@ td.fr{color:var(--ok);font-weight:700}
     </table>
   </div>
   <p class="small" style="margin-top:10px">Fontes: IDEB/INEP 2023, SIOPE/FNDE 2023, Censo Escolar INEP 2024 e Anuário Brasileiro da Educação Básica 2024. Média de eficiência do piloto: θ = 0,971. Seis dos 12 municípios estão na fronteira.</p>
-  <details class="conta" id="calculos" open><summary>Os cálculos: contraste, DEA, AHP e custo ajustado</summary><div class="body">
-    <p><b>IDEB por mil reais gastos por aluno</b><span class="f formula">Niterói:  5,9 ÷ 15,8 = 0,373</span><span class="f formula">Miracema: 7,9 ÷ 10,5 = 0,752</span></p>
-    <p>Niterói gasta 50,5% a mais e entrega um IDEB 25,3% menor. Miracema converte cada real em aprendizagem com o dobro (2,01×) do rendimento. Essa comparação não depende do DEA: é uma divisão simples.</p>
-    <p><b>O que θ = 0,9683 significa</b><span class="f formula">φ = 1/θ = 1/0,9683 = 1,033</span>Com os mesmos insumos, Niterói poderia elevar seus dois IDEBs em cerca de 3,3% até alcançar a fronteira formada pelos municípios de referência.</p>
-    <p><b>O modelo DEA resolvido para cada município j</b><span class="f formula">max φ</span><span class="f formula">s.a.  Σ λₖ · insumoₖ ≤ insumoⱼ   (gasto/aluno, alunos/docente)</span><span class="f formula">      Σ λₖ · produtoₖ ≥ φ · produtoⱼ   (IDEB AI, IDEB AF)</span><span class="f formula">      Σ λₖ = 1   (retornos variáveis, BCC)    λₖ ≥ 0</span>São 12 problemas de programação linear, um por município. O escore publicado é θ = 1/φ.</p>
-    <p><b>Por que metade sai na fronteira</b><span class="f formula">mínimo de DMUs = 3 × (insumos + produtos) = 3 × (2 + 2) = 12</span>O piloto tem 12 municípios: está exatamente no limite, e por isso o DEA discrimina pouco.</p>
-    <p><b>Quantas comparações o AHP exige</b><span class="f formula">73 metas direto: 73 × 72 / 2 = 2.628 comparações</span><span class="f formula">6 eixos entre si: 6 × 5 / 2 = 15 comparações</span>Por isso o AHP foi feito em dois níveis.</p>
-    <p><b>Custo ajustado pela eficiência</b><span class="f formula">c′ = c / θ^γ   →   Cambuci, θ = 0,88, γ = 1:  c′ = c / 0,88 = 1,136 · c</span>Cada resultado em Cambuci “custa” 13,6% a mais no modelo do que num município da fronteira.</p>
-    <p class="ex">Os 12 escores foram recalculados de forma independente, resolvendo um problema de programação linear para cada município. Todos batem com o publicado até a quarta casa decimal.</p>
-  </div></details>
+  <p class="small"><a href="#calculos">Ver todos os cálculos ↓</a></p>
 </section>
 
 <section id="alocacao">
@@ -309,6 +300,56 @@ td.fr{color:var(--ok);font-weight:700}
       <li>O parâmetro mais influente é a penalização por ineficiência <b>γ</b> (elasticidade de 0,38): condicionar o repasse à gestão eficiente move mais o plano do que aumentar o repasse.</li>
     </ul>
   </div>
+</section>
+
+<section id="calculos">
+  <h2>Os cálculos, módulo por módulo</h2>
+  <p class="small muted">Cada bloco mostra a conta feita com os números do trabalho. Toque no título para recolher.</p>
+
+  <details class="conta" open><summary>1 · AHP: comparações e consistência</summary><div class="body">
+    <p><b>Quantas comparações seriam necessárias</b><span class="f formula">73 metas direto: 73 × 72 / 2 = 2.628 comparações</span><span class="f formula">6 eixos entre si: 6 × 5 / 2 = 15 comparações</span>Por isso o AHP foi feito em dois níveis: eixos primeiro, metas dentro de cada eixo depois.</p>
+    <p><b>Pesos pelo autovetor principal</b><span class="f formula">A · w = λmax · w   (w normalizado para somar 1)</span></p>
+    <p><b>Teste de consistência</b><span class="f formula">CI = (λmax − n) / (n − 1)     CR = CI / RI</span>O painel obteve CR = 0,07, abaixo do limite de 0,10. Para a matriz dos 6 eixos, em que RI = 1,24, isso corresponde a:<span class="f formula">CI = 0,07 × 1,24 = 0,087  →  λmax = 6 + 5 × 0,087 = 6,43</span></p>
+    <p><b>Resultado publicado:</b> Alfabetização e Literacia (0,22) e Educação Básica Universal (0,20) são os eixos de maior peso.</p>
+    <p class="note">A matriz de comparações do painel não está publicada no artigo. A conversão de CR em λmax acima supõe que o CR se refere à matriz dos 6 eixos.</p>
+  </div></details>
+
+  <details class="conta" open><summary>2 · DEA: eficiência dos 12 municípios</summary><div class="body">
+    <p><b>Problema resolvido para cada município j</b><span class="f formula">max φ</span><span class="f formula">s.a. Σ λₖ · insumoₖ ≤ insumoⱼ   (gasto/aluno, alunos/docente)</span><span class="f formula">Σ λₖ · produtoₖ ≥ φ · produtoⱼ   (IDEB AI, IDEB AF)</span><span class="f formula">Σ λₖ = 1 (BCC, retornos variáveis)   λₖ ≥ 0</span>São 12 problemas de programação linear. O escore publicado é θ = 1/φ.</p>
+    <p><b>Exemplo: Niterói</b><span class="f formula">θ = 0,9683  →  φ = 1/0,9683 = 1,033</span>Com os mesmos insumos, Niterói poderia elevar seus dois IDEBs em cerca de 3,3% até alcançar a fronteira.</p>
+    <p><b>Por que metade sai na fronteira</b><span class="f formula">mínimo de DMUs = 3 × (insumos + produtos) = 3 × (2 + 2) = 12</span>O piloto tem exatamente 12 municípios: está no limite, e o DEA discrimina pouco.</p>
+    <p><b>O contraste que não depende do DEA</b><span class="f formula">Niterói: 5,9 ÷ 15,8 = 0,373 ponto de IDEB por R$ mil</span><span class="f formula">Miracema: 7,9 ÷ 10,5 = 0,752 ponto de IDEB por R$ mil</span>Niterói gasta 50,5% a mais e entrega IDEB 25,3% menor. Miracema rende 2,01 vezes mais por real.</p>
+    <p class="ex">Os 12 escores foram recalculados de forma independente e batem com o publicado até a quarta casa decimal.</p>
+  </div></details>
+
+  <details class="conta" open><summary>3 · Programação por Metas Estocástica: a alocação</summary><div class="body">
+    <p><b>Função objetivo</b><span class="f formula">Min Z = Σᵢ wᵢ · (dᵢ⁻ + dᵢ⁺)</span>Minimiza a distância do plano a cada meta, com cada desvio pesado pelo AHP. Uma meta com peso alto “custa” mais para ficar para trás.</p>
+    <p><b>Restrição de cada meta</b><span class="f formula">Σⱼ Σₜ cᵢⱼₜ · xᵢⱼₜ + dᵢ⁻ − dᵢ⁺ = gᵢ</span>O que se investe na meta i, mais o que falta (d⁻), menos o que sobra (d⁺), fecha exatamente no valor-meta gᵢ.</p>
+    <p><b>Custo ajustado pela eficiência</b><span class="f formula">c′ = c / θ^γ  →  Cambuci, θ = 0,88, γ = 1:  c′ = c / 0,88 = 1,136 · c</span>Cada resultado em Cambuci custa 13,6% a mais no modelo do que num município da fronteira.</p>
+    <p><b>Orçamento incerto</b> — fração do PIB sorteada numa triangular com mínimo 5,5%, moda 7,5% e máximo 10%:<span class="f formula">média = (5,5 + 7,5 + 10) / 3 = 7,67% do PIB</span><span class="f formula">σ = √[(a² + b² + c² − ab − ac − bc) / 18] = 0,92 p.p.</span></p>
+    <p><b>Orçamento “seguro” a 95%</b><span class="f formula">E[B] − Φ⁻¹(0,95) · σ = 7,67 − 1,645 × 0,92 = 6,15% do PIB</span>O plano é montado para caber em cerca de 6,15% do PIB, valor que é superado em 95% dos cenários.</p>
+    <p><b>Equidade</b><span class="f formula">Σⱼ xᵢⱼₜ ≥ δ · Rⱼ,   δ ≥ 1,2 se IDHM &lt; mediana</span>Municípios mais pobres recebem pelo menos 20% acima do piso.</p>
+  </div></details>
+
+  <details class="conta" open><summary>4 · Monte Carlo: o plano resiste?</summary><div class="body">
+    <p><b>Critério de aprovação</b><span class="f formula">85% de 73 metas = 62,05  →  pelo menos 63 metas</span><span class="f formula">P(cumprir ≥ 63 metas) ≥ 0,80</span>O framework obteve 0,84: aprovado. As estratégias (a) 0,42 e (b) 0,61 seriam reprovadas.</p>
+    <p><b>Precisão com 10.000 cenários</b><span class="f formula">erro-padrão = √[p(1 − p)/N] = √(0,84 × 0,16 / 10.000) = 0,37 p.p.</span><span class="f formula">IC 95% = 84% ± 1,96 × 0,37 = 84% ± 0,7 p.p.</span>Mesmo no pior lado do intervalo, o resultado fica acima de 80%.</p>
+    <p><b>Choques externos (Poisson, 0,08 por ano)</b><span class="f formula">P(ao menos 1 choque em 10 anos) = 1 − e^(−0,08 × 10) = 1 − e^(−0,8) = 55%</span>Em mais da metade dos cenários o plano enfrenta pelo menos uma crise no decênio.</p>
+    <p><b>Cenários ruins</b><span class="f formula">3,2% de 10.000 = 320 cenários abaixo de 75% das metas</span>Todos com dois anos seguidos de PIB negativo.</p>
+  </div></details>
+
+  <details class="conta" open><summary>5 · Comparação das três estratégias</summary><div class="body">
+    <div class="scroll"><table>
+      <thead><tr><th>Estratégia</th><th>Metas</th><th>%</th><th>PIB</th><th>Robustez</th></tr></thead>
+      <tbody>
+        <tr><td>(a) Matrículas</td><td>47/73</td><td>64,4%</td><td>9,8%</td><td>42% ✗</td></tr>
+        <tr><td>(b) Metas sem DEA</td><td>58/73</td><td>79,5%</td><td>9,5%</td><td>61% ✗</td></tr>
+        <tr><td><b>(c) Proposto</b></td><td>68/73</td><td><b>93,2%</b></td><td><b>9,1%</b></td><td><b>84% ✓</b></td></tr>
+      </tbody>
+    </table></div>
+    <p><span class="f formula">ganho: 68 − 47 = 21 metas a mais   ·   economia: 9,8% − 9,1% = 0,7 p.p. do PIB</span>A estratégia proposta cumpre mais metas gastando menos, e é a única que passa no critério de robustez (≥ 80%).</p>
+    <p class="note">Estes resultados vêm da instância sintética de 50 municípios e 10 metas, expressos na escala das 73 metas do PNE.</p>
+  </div></details>
 </section>
 
 <section id="glossario">
