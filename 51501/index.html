@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fluxo em Pronto-Socorro</title>
+<meta name="description" content="ENEGEP 2026 · trabalho 51501 · Teoria das Filas, SAPEVO-M e Simulação de Eventos Discretos: conceitos, método, glossário e referências.">
+<style>
+:root{
+  --bg:#f5f7fb; --card:#ffffff; --ink:#14213d; --muted:#5b6782; --line:#dde3ef;
+  --brand:#13306b; --brand-2:#2357c6; --soft:#e9eff9; --hot:#c2410c; --hot-soft:#fff1e8;
+  --ok:#0f7a4a; --ok-soft:#e6f5ed; --warn:#8a5a00; --warn-soft:#fff7e0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1424; --card:#152038; --ink:#e7ecf6; --muted:#9aa7c2; --line:#26334f;
+    --brand:#8fb0ff; --brand-2:#8fb0ff; --soft:#1b2946; --hot:#ff9a5c; --hot-soft:#3a2416;
+    --ok:#5fd39a; --ok-soft:#14321f; --warn:#f2c35b; --warn-soft:#352a10;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1424; --card:#152038; --ink:#e7ecf6; --muted:#9aa7c2; --line:#26334f;
+  --brand:#8fb0ff; --brand-2:#8fb0ff; --soft:#1b2946; --hot:#ff9a5c; --hot-soft:#3a2416;
+  --ok:#5fd39a; --ok-soft:#14321f; --warn:#f2c35b; --warn-soft:#352a10;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
+header.hero{background:#13306b;color:#fff;padding:28px 16px 24px}
+header.hero .wrap{padding-bottom:0}
+.tag{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.14);padding:4px 10px;border-radius:999px}
+h1{font-size:23px;line-height:1.25;margin:12px 0 10px}
+.authors{font-size:14px;opacity:.9;margin:0}
+.when{font-size:13px;opacity:.75;margin:6px 0 0}
+nav.chips{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.chips .wrap{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+nav.chips .wrap::-webkit-scrollbar{display:none}
+nav.chips a{flex:0 0 auto;font-size:13px;text-decoration:none;color:var(--brand);background:var(--soft);padding:6px 12px;border-radius:999px;white-space:nowrap}
+section{margin-top:28px}
+h2{font-size:19px;margin:0 0 12px;color:var(--brand)}
+h3{font-size:16px;margin:18px 0 8px}
+p{margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center}
+.kpi b{display:block;font-size:20px;color:var(--brand)}
+.kpi span{font-size:12px;color:var(--muted);line-height:1.3;display:block;margin-top:2px}
+.tldr{border-left:4px solid var(--brand-2)}
+.tldr li{margin-bottom:6px}
+/* fluxo do método */
+.flow{display:grid;gap:10px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative}
+.step .num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#13306b;color:#fff;font-weight:700;font-size:14px;margin-right:8px}
+.step .q{font-weight:700}
+.step .m{display:inline-block;margin-top:6px;font-size:13px;background:var(--soft);color:var(--brand);padding:3px 10px;border-radius:999px}
+.step dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:10px 0 0;font-size:14px}
+.step dt{color:var(--muted)}
+.step dd{margin:0}
+.arrow{text-align:center;color:var(--muted);font-size:18px;line-height:1}
+/* barras de utilização */
+.bars{display:grid;gap:12px}
+.bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.track{position:relative;height:14px;border-radius:7px;background:var(--soft);overflow:visible}
+.fill{height:100%;border-radius:7px;background:var(--brand-2)}
+.fill.hot{background:var(--hot)}
+.limit{position:absolute;right:0;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.5}
+.legend{font-size:12px;color:var(--muted);margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font-size:12px;color:var(--muted);font-weight:600}
+td.hl{color:var(--hot);font-weight:700}
+.scroll{overflow-x:auto}
+/* ranking */
+.rank{display:grid;gap:10px}
+.rk .lbl{display:flex;justify-content:space-between;gap:8px;font-size:14px;margin-bottom:4px}
+.rk .fill{background:var(--brand)}
+.rk.top .fill{background:var(--ok)}
+/* antes/depois */
+.ba{display:grid;gap:12px}
+.ba .row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;font-size:14px}
+.ba .row .t{grid-column:1/3;display:flex;justify-content:space-between}
+.pill{font-size:12px;padding:2px 8px;border-radius:999px}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.duo{display:grid;gap:4px}
+.duo .track{height:10px}
+.duo .fill.now{background:var(--muted)}
+.duo .fill.new{background:var(--ok)}
+.note{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn);border-radius:10px;padding:12px 14px;font-size:14px}
+/* glossário */
+.search{width:100%;font-size:16px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-bottom:10px}
+.cat{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 6px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:6px}
+summary{cursor:pointer;padding:11px 14px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--muted);font-weight:400}
+details[open] summary::after{content:"–"}
+details .body{padding:0 14px 12px;font-size:15px}
+details .body .ex{font-size:14px;color:var(--muted)}
+code,.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;background:var(--soft);padding:1px 6px;border-radius:6px}
+.formula{display:block;padding:8px 10px;margin:6px 0;overflow-x:auto;white-space:nowrap}
+.refs li{margin-bottom:8px;font-size:14px}
+.pillar{margin-bottom:14px}
+.pillar h3{margin-top:0}
+footer{margin-top:36px;font-size:13px;color:var(--muted);text-align:center}
+.hidden{display:none}
+@media (min-width:640px){
+  h1{font-size:28px}
+  .flow{grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch}
+  .arrow{align-self:center}
+  .kpi b{font-size:24px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">ENEGEP 2026 · Trabalho 51501</span>
+    <h1>Otimização do fluxo em prontos-socorros: Teoria das Filas, SAPEVO-M e Simulação de Eventos Discretos</h1>
+    <p class="authors">Geovane Virmecati · José Bezerra da Silva Filho</p>
+    <p class="when">Área 03 — Pesquisa Operacional · Sessão de pôster STP 02 · 21/10/2026</p>
+  </div>
+</header>
+
+<nav class="chips" aria-label="Seções">
+  <div class="wrap">
+    <a href="#resumo">Resumo</a>
+    <a href="#metodo">Método</a>
+    <a href="#gargalo">Gargalo</a>
+    <a href="#decisao">Decisão</a>
+    <a href="#validacao">Validação</a>
+    <a href="#glossario">Glossário</a>
+    <a href="#referencial">Referencial</a>
+    <a href="#perguntas">Perguntas</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="resumo">
+  <h2>Em 30 segundos</h2>
+  <div class="kpis">
+    <div class="kpi"><b>73%</b><span>dos prontos-socorros acima de 100% de ocupação (CFM, 2023)</span></div>
+    <div class="kpi"><b>R$ 4,8 bi</b><span>por ano ao SUS em reinternações evitáveis (MS, 2022)</span></div>
+    <div class="kpi"><b>&gt; 2 h</b><span>de espera por consulta em cidades médias</span></div>
+  </div>
+  <div class="card tldr" style="margin-top:12px">
+    <ul style="margin:0;padding-left:18px">
+      <li><b>Pergunta:</b> num pronto-socorro lotado, onde está o gargalo e em que vale investir primeiro?</li>
+      <li><b>Achado:</b> o gargalo está nos <b>exames</b> (utilização 0,844), e não na consulta médica, como a gestão supunha.</li>
+      <li><b>Decisão:</b> a alternativa A1 (médico adicional + triagem eletrônica) ficou em 1º lugar no SAPEVO-M e no AHP.</li>
+      <li><b>Validação:</b> na simulação, A1 cumpre as 6 metas do CFM e reduz a espera por exames em 63,8%.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="metodo">
+  <h2>O método: três perguntas, três ferramentas</h2>
+  <p class="small muted">A ideia central é separar três decisões que costumam ser tomadas juntas e sem dados.</p>
+  <div class="flow">
+    <div class="step">
+      <span class="num">1</span><span class="q">Diagnosticar: onde está o gargalo?</span><br>
+      <span class="m">Teoria das Filas · M/M/c</span>
+      <dl><dt>Entra</dt><dd>λ, μ e c de cada etapa</dd><dt>Sai</dt><dd>ρ, Lq, Wq, W e P(espera)</dd></dl>
+    </div>
+    <div class="arrow" aria-hidden="true">↓</div>
+    <div class="step">
+      <span class="num">2</span><span class="q">Priorizar: o que fazer primeiro?</span><br>
+      <span class="m">SAPEVO-M · com AHP de verificação</span>
+      <dl><dt>Entra</dt><dd>4 alternativas, 5 critérios, 3 decisores</dd><dt>Sai</dt><dd>Ranking das alternativas</dd></dl>
+    </div>
+    <div class="arrow" aria-hidden="true">↓</div>
+    <div class="step">
+      <span class="num">3</span><span class="q">Validar: a escolha resiste ao pico?</span><br>
+      <span class="m">Simulação de Eventos Discretos</span>
+      <dl><dt>Entra</dt><dd>Pico 18h–22h (×2,4), triagem de Manchester</dd><dt>Sai</dt><dd>Metas do CFM atendidas ou não</dd></dl>
+    </div>
+  </div>
+  <div class="card small" style="margin-top:12px">
+    <b>Cenário estudado:</b> pronto-socorro de hospital geral de médio porte (250 leitos, referência para 180 mil habitantes). O fluxo tem quatro etapas em sequência: triagem → consulta médica → observação → exames. Os parâmetros são <b>sintéticos</b>, calibrados com dados do CFM (2023) e do Ministério da Saúde (2022).
+  </div>
+</section>
+
+<section id="gargalo">
+  <h2>1 · Diagnóstico: a utilização de cada etapa</h2>
+  <div class="card">
+    <div class="bars">
+      <div class="bar"><div class="lbl"><span>Triagem · M/M/2</span><b>0,418</b></div><div class="track"><div class="fill" style="width:41.8%"></div><div class="limit"></div></div></div>
+      <div class="bar"><div class="lbl"><span>Consulta médica · M/M/4</span><b>0,740</b></div><div class="track"><div class="fill" style="width:74%"></div><div class="limit"></div></div></div>
+      <div class="bar"><div class="lbl"><span>Observação · M/M/12</span><b>0,630</b></div><div class="track"><div class="fill" style="width:63%"></div><div class="limit"></div></div></div>
+      <div class="bar"><div class="lbl"><span><b>Exames/Lab. · M/M/3</b></span><b style="color:var(--hot)">0,844</b></div><div class="track"><div class="fill hot" style="width:84.4%"></div><div class="limit"></div></div></div>
+    </div>
+    <p class="legend">ρ = λ/(c·μ). A linha à direita marca ρ = 1: daí em diante a fila cresce sem limite.</p>
+  </div>
+  <h3>Indicadores em estado estacionário (Erlang C)</h3>
+  <div class="card scroll">
+    <table>
+      <thead><tr><th>Indicador</th><th>Triagem</th><th>Consulta</th><th>Observ.</th><th>Exames</th></tr></thead>
+      <tbody>
+        <tr><td>λ (pac./h)</td><td>18,4</td><td>14,2</td><td>6,8</td><td>8,1</td></tr>
+        <tr><td>μ (pac./h por servidor)</td><td>22,0</td><td>4,8</td><td>0,9</td><td>3,2</td></tr>
+        <tr><td>c (servidores)</td><td>2</td><td>4</td><td>12</td><td>3</td></tr>
+        <tr><td>Lq (pacientes na fila)</td><td>0,18</td><td>1,40</td><td>0,17</td><td class="hl">3,89</td></tr>
+        <tr><td>Wq (espera, min)</td><td>0,6</td><td>5,9</td><td>1,5</td><td class="hl">28,8</td></tr>
+        <tr><td>W (no sistema, min)</td><td>3,3</td><td>18,4</td><td>68,2</td><td class="hl">47,5</td></tr>
+        <tr><td>P(ter de esperar)</td><td>24,7%</td><td>49,2%</td><td>10,0%</td><td class="hl">72,0%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small" style="margin-top:10px">Exames lidera nas três medidas ao mesmo tempo: utilização, tamanho da fila e tempo de espera. A gestão apontava a consulta médica. O modelo mostra o contrário.</p>
+</section>
+
+<section id="decisao">
+  <h2>2 · Priorização: SAPEVO-M</h2>
+  <p class="small">Um comitê de três especialistas (gestor médico, enfermeiro-chefe e administrador hospitalar) ordenou quatro alternativas segundo cinco critérios.</p>
+  <div class="card scroll small">
+    <table>
+      <thead><tr><th>Critério</th><th>Peso</th><th>A1</th><th>A2</th><th>A3</th><th>A4</th></tr></thead>
+      <tbody>
+        <tr><td>Redução de Wq (min)</td><td>0,312</td><td>−18,4</td><td>−12,1</td><td>−8,6</td><td>−22,3</td></tr>
+        <tr><td>Custo (R$ mi)</td><td>0,241</td><td>4,2</td><td>2,8</td><td>6,1</td><td>8,4</td></tr>
+        <tr><td>Impacto no CSAT</td><td>0,198</td><td>22%</td><td>14%</td><td>18%</td><td>28%</td></tr>
+        <tr><td>Prazo (meses)</td><td>0,142</td><td>6</td><td>3</td><td>12</td><td>18</td></tr>
+        <tr><td>Risco operacional</td><td>0,107</td><td>Médio</td><td>Baixo</td><td>Alto</td><td>Alto</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Resultado</h3>
+  <div class="card rank">
+    <div class="rk top"><div class="lbl"><span><b>1º A1</b> · Médico adicional + triagem eletrônica</span><b>8,14</b></div><div class="track"><div class="fill" style="width:81.4%"></div></div></div>
+    <div class="rk"><div class="lbl"><span>2º A4 · Expansão de leitos + telemedicina</span><b>7,62</b></div><div class="track"><div class="fill" style="width:76.2%"></div></div></div>
+    <div class="rk"><div class="lbl"><span>3º A2 · Agendamento online prioritário</span><b>7,38</b></div><div class="track"><div class="fill" style="width:73.8%"></div></div></div>
+    <div class="rk"><div class="lbl"><span>4º A3 · Nova ala de observação</span><b>6,21</b></div><div class="track"><div class="fill" style="width:62.1%"></div></div></div>
+    <p class="legend">Escores SAPEVO-M. O AHP rodado em paralelo deu a mesma ordem (0,382 · 0,298 · 0,214 · 0,106), e o ρ de Spearman entre os dois rankings é 1,00.</p>
+  </div>
+</section>
+
+<section id="validacao">
+  <h2>3 · Validação: Simulação de Eventos Discretos</h2>
+  <p class="small">Horizonte de 30 dias, 5 dias de aquecimento descartados, 20 replicações, IC 95%, sazonalidade horária e prioridade pelo protocolo de Manchester.</p>
+  <div class="card ba">
+    <div class="row"><div class="t"><span>Espera por exames (min)</span><span class="pill ok">meta ≤ 20</span></div>
+      <div class="duo" style="grid-column:1/3">
+        <div class="track"><div class="fill now" style="width:100%"></div></div>
+        <div class="track"><div class="fill new" style="width:36.2%"></div></div>
+      </div>
+      <span class="small muted">Atual 30,9 → A1 <b>11,2</b></span></div>
+    <div class="row"><div class="t"><span>Espera por consulta (min)</span><span class="pill ok">meta ≤ 10</span></div>
+      <div class="duo" style="grid-column:1/3">
+        <div class="track"><div class="fill now" style="width:100%"></div></div>
+        <div class="track"><div class="fill new" style="width:46.2%"></div></div>
+      </div>
+      <span class="small muted">Atual 10,4 → A1 <b>4,8</b></span></div>
+    <div class="row"><div class="t"><span>Abandono da fila</span><span class="pill ok">meta ≤ 5%</span></div>
+      <div class="duo" style="grid-column:1/3">
+        <div class="track"><div class="fill now" style="width:100%"></div></div>
+        <div class="track"><div class="fill new" style="width:32%"></div></div>
+      </div>
+      <span class="small muted">Atual 12,8% → A1 <b>4,1%</b></span></div>
+    <div class="row"><div class="t"><span>Ocupação de leitos</span><span class="pill ok">meta ≤ 80%</span></div>
+      <span class="small muted" style="grid-column:1/3">Atual 84,2% → A1 <b>76,1%</b></span></div>
+    <div class="row"><div class="t"><span>Pacientes atendidos/dia</span><span class="pill ok">meta ≥ 350</span></div>
+      <span class="small muted" style="grid-column:1/3">Atual 312 → A1 <b>368</b></span></div>
+    <div class="row"><div class="t"><span>Satisfação (CSAT)</span><span class="pill ok">meta ≥ 75%</span></div>
+      <span class="small muted" style="grid-column:1/3">Atual 61,4% → A1 <b>83,2%</b></span></div>
+    <p class="legend">Barra cinza: cenário atual. Barra verde: com A1.</p>
+  </div>
+  <div class="kpis" style="margin-top:12px">
+    <div class="kpi"><b>6 de 6</b><span>metas do CFM atendidas por A1 (A4 atende 5)</span></div>
+    <div class="kpi"><b>−63,8%</b><span>na espera por exames</span></div>
+    <div class="kpi"><b>R$ 0,213 mi</b><span>por minuto de espera reduzido · payback de 2,8 anos</span></div>
+  </div>
+  <p class="small" style="margin-top:12px"><b>Por que a espera na simulação é maior que no modelo de filas?</b> O modelo analítico trabalha com a média do dia (estado estacionário). A simulação inclui o pico das 18h às 22h, quando a demanda chega a 2,4 vezes a média. A diferença entre as duas tabelas mede o custo do pico.</p>
+</section>
+
+<section id="glossario">
+  <h2>Glossário: todos os termos</h2>
+  <input class="search" id="q" type="search" placeholder="Buscar termo (ex.: Erlang, Spearman, Manchester)" aria-label="Buscar termo">
+  <div id="gl">
+
+  <div class="cat">Teoria das Filas</div>
+  <details><summary>Pesquisa Operacional (PO)</summary><div class="body">Área que usa modelos matemáticos para apoiar decisões sobre recursos escassos: quanto, onde, quando e em que ordem. Este trabalho combina três métodos de PO.</div></details>
+  <details><summary>Teoria das Filas</summary><div class="body">Estudo matemático de sistemas em que clientes chegam, esperam e são atendidos. Criada por Agner Erlang no início do século XX para dimensionar centrais telefônicas. Prevê tamanho de fila e tempo de espera a partir das taxas de chegada e de atendimento.</div></details>
+  <details><summary>Notação de Kendall (A/B/c)</summary><div class="body">Forma curta de descrever uma fila. A letra 1 indica como os clientes chegam, a letra 2 como o atendimento dura, e o número 3 quantos atendentes trabalham em paralelo. “M” vem de <i>Markoviano</i>, sem memória.</div></details>
+  <details><summary>Modelo M/M/c</summary><div class="body">Fila com chegadas Poisson, atendimento de duração exponencial e <i>c</i> atendentes em paralelo, numa fila única por ordem de chegada. É o modelo mais usado em saúde, porque tem solução fechada e aproxima bem sistemas muito ocupados.<p class="ex">Aqui: triagem M/M/2, consulta M/M/4, observação M/M/12, exames M/M/3.</p></div></details>
+  <details><summary>Processo de Poisson</summary><div class="body">Modelo de chegadas aleatórias e independentes a uma taxa média constante. Saber que alguém acabou de chegar não diz nada sobre quando chega o próximo.</div></details>
+  <details><summary>Distribuição exponencial</summary><div class="body">Distribuição do tempo de atendimento no M/M/c. Atendimentos curtos são frequentes e há alguns longos. Ela é “sem memória”: o tempo que falta não depende de quanto já passou.</div></details>
+  <details><summary>λ — taxa de chegada</summary><div class="body">Pacientes que chegam por hora a uma etapa.<p class="ex">Exames: λ = 8,1 pacientes/h.</p></div></details>
+  <details><summary>μ — taxa de serviço</summary><div class="body">Pacientes que <b>um</b> atendente consegue concluir por hora. O tempo médio de atendimento é 1/μ.<p class="ex">Exames: μ = 3,2/h, ou seja, cerca de 19 min por paciente.</p></div></details>
+  <details><summary>c — número de servidores</summary><div class="body">Quantos atendentes, salas ou equipamentos trabalham em paralelo na etapa (médicos, leitos de observação, máquinas de exame).</div></details>
+  <details><summary>ρ — utilização (intensidade de tráfego)</summary><div class="body">Fração do tempo em que cada servidor está ocupado. <span class="f formula">ρ = λ / (c · μ)</span> Precisa ser menor que 1. Perto de 1, a fila explode.<p class="ex">Exames: 8,1 / (3 × 3,2) = 0,844.</p></div></details>
+  <details><summary>Carga em Erlangs (a)</summary><div class="body">Quantos servidores seriam necessários, em média, só para dar conta da demanda: <span class="f formula">a = λ / μ</span><p class="ex">Exames: 8,1 / 3,2 = 2,53, ou seja, 2,5 dos 3 servidores ocupados em média.</p></div></details>
+  <details><summary>Estabilidade (ρ &lt; 1)</summary><div class="body">Condição para a fila não crescer indefinidamente: a capacidade total (c·μ) tem de superar a demanda (λ). Com ρ = 0,844, a etapa de exames tem só 16% de folga.</div></details>
+  <details><summary>Estado estacionário</summary><div class="body">Comportamento médio do sistema depois de muito tempo, quando as oscilações se compensam. As fórmulas M/M/c valem nesse regime e por isso não mostram picos.</div></details>
+  <details><summary>P₀ — probabilidade de sistema vazio</summary><div class="body">Chance de não haver nenhum paciente na etapa. Entra no cálculo de todos os outros indicadores.</div></details>
+  <details><summary>Fórmula de Erlang C — P(ter de esperar)</summary><div class="body">Probabilidade de um paciente chegar e encontrar todos os servidores ocupados, tendo de entrar na fila.<p class="ex">Exames: 72%, ou seja, quase 3 em cada 4 pacientes esperam.</p></div></details>
+  <details><summary>Lq — tamanho médio da fila</summary><div class="body">Número médio de pacientes esperando, sem contar quem está sendo atendido.</div></details>
+  <details><summary>Wq — espera média na fila</summary><div class="body">Tempo médio entre chegar e começar a ser atendido: <span class="f formula">Wq = Lq / λ</span></div></details>
+  <details><summary>W — tempo médio no sistema</summary><div class="body">Espera mais atendimento: <span class="f formula">W = Wq + 1/μ</span></div></details>
+  <details><summary>L — pacientes no sistema</summary><div class="body">Pacientes na fila mais os em atendimento: <span class="f formula">L = λ · W</span></div></details>
+  <details><summary>Lei de Little</summary><div class="body">Relação geral entre quantidade, taxa e tempo, válida para quase qualquer fila estável: <span class="f formula">L = λ · W  e  Lq = λ · Wq</span> Serve para checar se uma tabela de indicadores é coerente.</div></details>
+  <details><summary>Gargalo</summary><div class="body">A etapa que limita o fluxo inteiro. Investir fora dela não reduz a espera total. Aqui o gargalo é a etapa de exames.</div></details>
+  <details><summary>Fator de pico</summary><div class="body">Quanto a demanda do horário mais carregado supera a média. Neste caso, 2,4 vezes entre 18h e 22h.</div></details>
+
+  <div class="cat">Decisão multicritério</div>
+  <details><summary>Apoio Multicritério à Decisão (AMD / MCDA)</summary><div class="body">Família de métodos para escolher entre alternativas quando há vários critérios em conflito (custo × prazo × risco × benefício) e mais de um decisor.</div></details>
+  <details><summary>Alternativa</summary><div class="body">Cada opção de investimento avaliada.<p class="ex">A1 médico adicional + triagem eletrônica · A2 agendamento online prioritário · A3 nova ala de observação · A4 expansão de leitos + telemedicina.</p></div></details>
+  <details><summary>Critério e peso</summary><div class="body">Critério é cada aspecto usado para comparar as alternativas. Peso é a importância relativa dele.<p class="ex">Redução de Wq 0,312 · custo 0,241 · CSAT 0,198 · prazo 0,142 · risco 0,107.</p></div></details>
+  <details><summary>Decisor / comitê</summary><div class="body">Quem emite os julgamentos. Aqui foram três especialistas: gestor médico, enfermeiro-chefe e administrador hospitalar.</div></details>
+  <details><summary>SAPEVO-M</summary><div class="body"><i>Simple Aggregation of Preferences Expressed by Ordinal Vectors – Multi Decision Makers</i>. Método brasileiro (Gomes et al.) em que cada decisor só precisa <b>ordenar</b> critérios e alternativas: “A é melhor que B”. O método converte essas ordens em pesos e escores e agrega as opiniões dos vários decisores.</div></details>
+  <details><summary>Preferência ordinal × cardinal</summary><div class="body">Ordinal: dizer a ordem (A antes de B). Cardinal: dizer quanto (A vale 3 vezes B). A ordem é mais fácil de sustentar e reduz a carga cognitiva do decisor, e é por isso que o SAPEVO-M a usa.</div></details>
+  <details><summary>AHP — Analytic Hierarchy Process</summary><div class="body">Método de Saaty que compara critérios e alternativas aos pares numa escala de 1 a 9 (“quantas vezes mais importante”). Gera um vetor de prioridades que soma 1. Aqui foi usado como verificação cruzada do SAPEVO-M.</div></details>
+  <details><summary>Vetor de prioridades</summary><div class="body">Saída do AHP: um escore por alternativa, normalizado para somar 1.<p class="ex">A1 0,382 · A4 0,298 · A2 0,214 · A3 0,106.</p></div></details>
+  <details><summary>ρ de Spearman</summary><div class="body">Correlação entre duas ordenações, de −1 (opostas) a +1 (idênticas): <span class="f formula">ρ = 1 − 6·Σd² / [n(n² − 1)]</span> em que d é a diferença de posição. Aqui deu 1,00: SAPEVO-M e AHP colocaram as quatro alternativas na mesma ordem.</div></details>
+  <details><summary>Convergência entre métodos</summary><div class="body">Quando métodos diferentes chegam ao mesmo ranking. É um indício de consistência. Neste trabalho os dois métodos usaram os mesmos julgamentos de entrada, então a convergência não equivale a uma validação independente.</div></details>
+
+  <div class="cat">Simulação</div>
+  <details><summary>Simulação de Eventos Discretos (SED)</summary><div class="body">Modelo de computador que reproduz o sistema evento a evento (chegada, início e fim de atendimento), sorteando tempos aleatórios. Ao contrário das fórmulas de fila, capta picos, prioridades e interdependências entre etapas.</div></details>
+  <details><summary>Evento discreto</summary><div class="body">Acontecimento instantâneo que muda o estado do sistema, como um paciente que chega ou um exame que termina. Entre dois eventos, nada muda.</div></details>
+  <details><summary>Horizonte de simulação</summary><div class="body">Período simulado. Aqui foram 30 dias de operação.</div></details>
+  <details><summary>Aquecimento (<i>warm-up</i>)</summary><div class="body">Período inicial descartado porque a simulação começa com o hospital vazio, o que não é realista. Aqui foram descartados 5 dias.</div></details>
+  <details><summary>Replicação</summary><div class="body">Cada rodada independente da simulação, com outros sorteios. Fazer várias (aqui, 20) permite medir a variabilidade dos resultados.</div></details>
+  <details><summary>Intervalo de confiança de 95% (IC 95%)</summary><div class="body">Faixa que contém o valor médio verdadeiro com 95% de confiança, calculada a partir das replicações.</div></details>
+  <details><summary>Sazonalidade horária</summary><div class="body">Variação da demanda ao longo do dia, que a SED incorpora e o modelo estacionário não.</div></details>
+  <details><summary>Validação do modelo</summary><div class="body">Testar se a alternativa escolhida no papel continua boa sob condições dinâmicas e realistas, antes de investir.</div></details>
+
+  <div class="cat">Saúde e gestão hospitalar</div>
+  <details><summary>Protocolo de Manchester</summary><div class="body">Sistema de classificação de risco usado em mais de 80% dos prontos-socorros públicos do Brasil. Separa os pacientes em cinco cores (vermelho, laranja, amarelo, verde e azul), cada uma com um tempo-alvo de atendimento.</div></details>
+  <details><summary>Triagem eletrônica</summary><div class="body">Classificação de risco apoiada por sistema digital, que agiliza a entrada e organiza a prioridade. Faz parte da alternativa A1.</div></details>
+  <details><summary>Fast Track</summary><div class="body">Fluxo rápido separado para casos de baixa complexidade, que não disputam fila com os graves.</div></details>
+  <details><summary>Telemedicina</summary><div class="body">Atendimento ou apoio médico a distância. Faz parte da alternativa A4.</div></details>
+  <details><summary>Taxa de abandono</summary><div class="body">Percentual de pacientes que desistem e vão embora antes do atendimento. Eles tendem a voltar em estado pior, e mais caros. Com A1, caiu de 12,8% para 4,1%.</div></details>
+  <details><summary>Taxa de ocupação de leitos</summary><div class="body">Percentual médio de leitos em uso. Acima de 80% o sistema perde folga para absorver picos.</div></details>
+  <details><summary>CSAT</summary><div class="body"><i>Customer Satisfaction Score</i>: percentual de pacientes satisfeitos com o atendimento.</div></details>
+  <details><summary>Metas do CFM</summary><div class="body">Referências do Conselho Federal de Medicina para prontos-socorros de referência regional, usadas aqui como critério de aprovação: espera por exames ≤ 20 min, por consulta ≤ 10 min, ocupação ≤ 80%, abandono ≤ 5%, ≥ 350 atendimentos/dia e CSAT ≥ 75%.</div></details>
+
+  <div class="cat">Economia da decisão</div>
+  <details><summary>Custo-efetividade</summary><div class="body">Custo dividido pelo benefício obtido. Aqui, reais investidos por minuto de espera reduzido: <span class="f formula">R$ mi ÷ minutos reduzidos</span><p class="ex">A1: 4,2 ÷ 19,7 = R$ 0,213 mi/min, o menor entre as alternativas que cumprem todas as metas.</p></div></details>
+  <details><summary>Payback</summary><div class="body">Tempo para o investimento se pagar. A1: 2,8 anos.</div></details>
+  <details><summary>Trade-off</summary><div class="body">O que se abre mão ao escolher. A2 é a mais barata (R$ 2,8 mi), mas cumpre só 3 das 6 metas. A1 custa mais e cumpre todas.</div></details>
+
+  <div class="cat">Metodologia científica</div>
+  <details><summary>Pesquisa quantitativa e prescritiva</summary><div class="body">Quantitativa porque trabalha com medidas numéricas. Prescritiva porque termina em uma recomendação de ação, e não só em uma descrição.</div></details>
+  <details><summary>Caso ilustrativo com dados sintéticos</summary><div class="body">Os parâmetros não vieram de prontuários. Foram construídos para representar um pronto-socorro público típico do Sudeste, calibrados por fontes oficiais (CFM e Ministério da Saúde). Isso valida o <b>encadeamento dos métodos</b>, não o diagnóstico de um hospital específico.</div></details>
+  <details><summary>Framework integrado</summary><div class="body">Sequência fixa de métodos em que a saída de um alimenta o seguinte: filas (diagnóstico) → SAPEVO-M (priorização) → SED (validação).</div></details>
+  <details><summary>Validade externa</summary><div class="body">Até que ponto os resultados valem fora do caso estudado. Aqui ela se apoia na comparação com casos reais (Sírio-Libanês, um hospital de Minas Gerais, emergências do Canadá e da Itália).</div></details>
+  <p id="semres" class="muted small hidden">Nenhum termo encontrado.</p>
+  </div>
+</section>
+
+<section id="referencial">
+  <h2>Referencial teórico e metodológico</h2>
+  <div class="card pillar">
+    <h3>Pilar 1 · Teoria das Filas aplicada à saúde</h3>
+    <p class="small">Base analítica do M/M/c (Erlang; Gross et al., 2008). Green (2006) mostra que dimensionar por filas reduz a espera em 25% a 40% frente a métodos empíricos. Uchoa et al. (2019) aplicaram M/M/c em prontos-socorros do SUS e acharam subutilização convivendo com lotação. Meira e Cespedes (2025) simularam o Fast Track em pronto-socorro brasileiro.</p>
+  </div>
+  <div class="card pillar">
+    <h3>Pilar 2 · Simulação de Eventos Discretos em hospitais</h3>
+    <p class="small">Fundamentos em Banks et al. (2010). Duguay e Chetouane (2007) reduziram em 38% a espera numa emergência canadense com triagem eletrônica e médico adicional no pico. Ferreira et al. (2020) replicaram o resultado no Brasil, e Improta et al. (2022) aplicaram SED em cardiologia na Itália.</p>
+  </div>
+  <div class="card pillar">
+    <h3>Pilar 3 · Decisão multicritério</h3>
+    <p class="small">SAPEVO-M (Gomes et al., 2020): agrega preferências ordinais de vários decisores e reduz a carga cognitiva frente ao AHP clássico. A lacuna que o trabalho aborda é a falta de estudos nacionais que combinem SAPEVO-M com simulação para validar a alternativa priorizada.</p>
+  </div>
+  <div class="card pillar">
+    <h3>Desenho da pesquisa</h3>
+    <p class="small">Abordagem quantitativa e prescritiva, em caso ilustrativo com parâmetros sintéticos calibrados por CFM (2023) e Ministério da Saúde (2022). A análise segue três etapas encadeadas (diagnóstico analítico, priorização multicritério e validação dinâmica) e termina com uma análise de custo-efetividade.</p>
+  </div>
+  <h3>Referências</h3>
+  <ol class="refs">
+    <li>BANKS, J. et al. <i>Discrete-Event System Simulation</i>. 5. ed. Pearson, 2010.</li>
+    <li>CFM. <i>Prontos-Socorros Brasileiros: diagnóstico e perspectivas</i>. Brasília, 2023.</li>
+    <li>DUGUAY, C.; CHETOUANE, F. Modeling and improving emergency department systems using discrete event simulation. <i>Simulation</i>, v. 83, n. 4, 2007.</li>
+    <li>FERREIRA, R. P. et al. Aplicação de simulação discreta em pronto-socorro público brasileiro. <i>Gestão &amp; Produção</i>, v. 27, n. 1, 2020.</li>
+    <li>GOMES, L. F. A. M. et al. <i>Métodos de Apoio Multicritério à Decisão</i>. Atlas, 2020.</li>
+    <li>GREEN, L. V. Queueing analysis in healthcare. In: HALL, R. W. (Org.). <i>Patient Flow</i>. Springer, 2006.</li>
+    <li>GROSS, D. et al. <i>Fundamentals of Queueing Theory</i>. 4. ed. Wiley, 2008.</li>
+    <li>H2 SOLUÇÕES EM SAÚDE. <i>Cases de eficiência operacional hospitalar</i>, 2024.</li>
+    <li>HOSPITAL SÍRIO-LIBANÊS. <i>Relatório de Inovação 2023</i>.</li>
+    <li>IMPROTA, G. et al. Discrete Event Simulation to Improve Clinical Consultations in a Rehabilitation Cardiology Unit. IEEE EHB, 2022.</li>
+    <li>MEIRA, D. M.; CESPEDES, J. G. Otimização de processos hospitalares. <i>Revista Contemporânea</i>, v. 5, n. 1, 2025.</li>
+    <li>MINISTÉRIO DA SAÚDE. <i>Política Nacional de Atenção às Urgências</i>. 3. ed., 2022.</li>
+    <li>UCHOA, C. et al. Avaliação do sistema de atendimento em pronto-socorro via teoria das filas. <i>Production</i>, v. 29, 2019.</li>
+  </ol>
+</section>
+
+<section id="perguntas">
+  <h2>Perguntas frequentes</h2>
+  <details><summary>Por que o gargalo é o exame e não o médico?</summary><div class="body">A etapa de exames tem a maior utilização (0,844), a maior fila (3,9 pacientes) e a maior espera (28,8 min). A consulta vem em segundo lugar nas três medidas. Contratar médicos sem mexer nos exames só empurra o paciente mais rápido para a fila do exame.</div></details>
+  <details><summary>O que acontece se a utilização passar de 1?</summary><div class="body">A demanda passa a ser maior que a capacidade e a fila cresce sem parar ao longo do turno. Com 0,844, um aumento de cerca de 18% na demanda de exames já leva a etapa a esse limite.</div></details>
+  <details><summary>Por que usar três métodos e não um só?</summary><div class="body">Cada um responde a uma pergunta diferente. Filas mostram onde está o problema. O SAPEVO-M escolhe o que fazer considerando custo, prazo, risco e satisfação. A simulação testa se a escolha resiste ao pico real. Um método só deixaria uma dessas perguntas sem resposta.</div></details>
+  <details><summary>Por que SAPEVO-M e não apenas AHP?</summary><div class="body">Com decisores de formações diferentes (médico, enfermagem e administração), perguntar “quantas vezes o critério A é mais importante que B” gera números que ninguém sustenta. Pedir só a ordem é mais simples e mais confiável. O AHP entrou como verificação.</div></details>
+  <details><summary>Spearman = 1 prova que a escolha é robusta?</summary><div class="body">Não sozinho. Com 4 alternativas, a chance de concordância total por acaso é de 1 em 24 (cerca de 4%), e os dois métodos partiram dos mesmos julgamentos. É indício de consistência, não prova independente. A validação mais forte vem da simulação.</div></details>
+  <details><summary>Por que a simulação mostra esperas maiores que o modelo de filas?</summary><div class="body">O modelo de filas usa a média do dia. A simulação inclui o pico das 18h às 22h (demanda 2,4 vezes maior). A diferença é justamente o custo do pico, que só a simulação revela.</div></details>
+  <details><summary>Os dados são de um hospital real?</summary><div class="body">Não. São parâmetros sintéticos calibrados por fontes oficiais (CFM e Ministério da Saúde). Usar dados de prontuário exige comitê de ética e convênio institucional. Esta etapa valida o método, e a aplicação com série histórica real é o próximo passo.</div></details>
+  <details><summary>Dá para aplicar no meu hospital? Que dados são necessários?</summary><div class="body">Sim. Para cada etapa do fluxo bastam três números: chegadas por hora (λ), atendimentos por hora de cada profissional ou equipamento (μ) e quantos trabalham em paralelo (c). Para a priorização, a lista de alternativas e um comitê que ordene critérios e opções. Para a simulação, a curva de chegadas ao longo do dia.</div></details>
+  <details><summary>Por que A1 e não A2, que é mais barata?</summary><div class="body">A2 custa R$ 2,8 mi, mas atende só 3 das 6 metas do CFM. Entre as alternativas que atendem todas, A1 tem o menor custo por minuto de espera reduzido (R$ 0,213 mi) e o menor payback (2,8 anos).</div></details>
+  <details><summary>Quais são as limitações?</summary><div class="body">Os parâmetros são sintéticos, e a simulação ainda não incorpora a variabilidade dos cinco níveis do protocolo de Manchester. Além disso, o critério de redução de espera do SAPEVO-M foi estimado antes da simulação, que depois mediu um ganho um pouco diferente (19,7 min no lugar de 18,4).</div></details>
+  <details><summary>Quais são os próximos passos?</summary><div class="body">(i) Incluir o protocolo de Manchester completo na simulação. (ii) Aplicar o framework em UTIs e centros cirúrgicos. (iii) Integrar programação de escalas por turno. (iv) Criar um painel de indicadores de fila em tempo real.</div></details>
+</section>
+
+<footer>
+  XLVI ENEGEP · São Paulo, 20 a 23 de outubro de 2026 · Trabalho 51501<br>
+  Geovane Virmecati · José Bezerra da Silva Filho
+</footer>
+</main>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), box=document.getElementById('gl'), none=document.getElementById('semres');
+  var norm=function(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();};
+  q.addEventListener('input',function(){
+    var t=norm(q.value.trim()), any=false;
+    box.querySelectorAll('details').forEach(function(d){
+      var hit=!t||norm(d.textContent).indexOf(t)>-1;
+      d.classList.toggle('hidden',!hit); if(hit) any=true;
+      d.open=!!t&&hit&&norm(d.querySelector('summary').textContent).indexOf(t)>-1;
+    });
+    box.querySelectorAll('.cat').forEach(function(c){
+      var n=c.nextElementSibling, show=false;
+      while(n&&n.tagName==='DETAILS'){ if(!n.classList.contains('hidden')) show=true; n=n.nextElementSibling; }
+      c.classList.toggle('hidden',!show);
+    });
+    none.classList.toggle('hidden',any);
+  });
+})();
+</script>
+</body>
+</html>
