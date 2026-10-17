@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FRAME-SCEN: Cenários com PO e IA</title>
+<meta name="description" content="ENEGEP 2026 · trabalho 52667 · FRAME-SCEN: cenários prospectivos com Pesquisa Operacional e Inteligência Artificial para PMEs industriais. Conceitos, método, cálculos, glossário e referências.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="FRAME-SCEN: cenários prospectivos com PO e IA para PMEs">
+<meta property="og:description" content="Cinco etapas, doze semanas: PESTEL, MICMAC, Monte Carlo, multicritério e planos com gatilhos. Método, cálculos, glossário e referencial do trabalho 52667 do ENEGEP 2026.">
+<meta property="og:url" content="https://geovime1977.github.io/enegep-2026/52667/">
+<meta property="og:image" content="https://geovime1977.github.io/enegep-2026/52667/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{
+  --bg:#f5f7fb; --card:#ffffff; --ink:#14213d; --muted:#5b6782; --line:#dde3ef;
+  --brand:#13306b; --brand-2:#2357c6; --soft:#e9eff9; --hot:#c2410c; --hot-soft:#fff1e8;
+  --ok:#0f7a4a; --ok-soft:#e6f5ed; --warn:#8a5a00; --warn-soft:#fff7e0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1424; --card:#152038; --ink:#e7ecf6; --muted:#9aa7c2; --line:#26334f;
+    --brand:#8fb0ff; --brand-2:#8fb0ff; --soft:#1b2946; --hot:#ff9a5c; --hot-soft:#3a2416;
+    --ok:#5fd39a; --ok-soft:#14321f; --warn:#f2c35b; --warn-soft:#352a10;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1424; --card:#152038; --ink:#e7ecf6; --muted:#9aa7c2; --line:#26334f;
+  --brand:#8fb0ff; --brand-2:#8fb0ff; --soft:#1b2946; --hot:#ff9a5c; --hot-soft:#3a2416;
+  --ok:#5fd39a; --ok-soft:#14321f; --warn:#f2c35b; --warn-soft:#352a10;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
+header.hero{background:#13306b;color:#fff;padding:28px 16px 24px}
+header.hero .wrap{padding-bottom:0}
+.tag{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.14);padding:4px 10px;border-radius:999px}
+h1{font-size:23px;line-height:1.25;margin:12px 0 10px}
+.authors{font-size:14px;opacity:.9;margin:0}
+.when{font-size:13px;opacity:.75;margin:6px 0 0}
+nav.chips{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.chips .wrap{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+nav.chips .wrap::-webkit-scrollbar{display:none}
+nav.chips a{flex:0 0 auto;font-size:13px;text-decoration:none;color:var(--brand);background:var(--soft);padding:6px 12px;border-radius:999px;white-space:nowrap}
+section{margin-top:28px}
+h2{font-size:19px;margin:0 0 12px;color:var(--brand)}
+h3{font-size:16px;margin:18px 0 8px}
+p{margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center}
+.kpi b{display:block;font-size:20px;color:var(--brand)}
+.kpi span{font-size:12px;color:var(--muted);line-height:1.3;display:block;margin-top:2px}
+.tldr{border-left:4px solid var(--brand-2)}
+.tldr li{margin-bottom:6px}
+/* fluxo do método */
+.flow{display:grid;gap:10px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative}
+.step .num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#13306b;color:#fff;font-weight:700;font-size:14px;margin-right:8px}
+.step .q{font-weight:700}
+.step .m{display:inline-block;margin-top:6px;font-size:13px;background:var(--soft);color:var(--brand);padding:3px 10px;border-radius:999px}
+.step dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:10px 0 0;font-size:14px}
+.step dt{color:var(--muted)}
+.step dd{margin:0}
+.arrow{text-align:center;color:var(--muted);font-size:18px;line-height:1}
+/* barras de utilização */
+.bars{display:grid;gap:12px}
+.bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.track{position:relative;height:14px;border-radius:7px;background:var(--soft);overflow:visible}
+.fill{height:100%;border-radius:7px;background:var(--brand-2)}
+.fill.hot{background:var(--hot)}
+.limit{position:absolute;right:0;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.5}
+.legend{font-size:12px;color:var(--muted);margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font-size:12px;color:var(--muted);font-weight:600}
+td.hl{color:var(--hot);font-weight:700}
+.scroll{overflow-x:auto}
+/* ranking */
+.rank{display:grid;gap:10px}
+.rk .lbl{display:flex;justify-content:space-between;gap:8px;font-size:14px;margin-bottom:4px}
+.rk .fill{background:var(--brand)}
+.rk.top .fill{background:var(--ok)}
+/* antes/depois */
+.ba{display:grid;gap:12px}
+.ba .row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;font-size:14px}
+.ba .row .t{grid-column:1/3;display:flex;justify-content:space-between}
+.pill{font-size:12px;padding:2px 8px;border-radius:999px}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.duo{display:grid;gap:4px}
+.duo .track{height:10px}
+.duo .fill.now{background:var(--muted)}
+.duo .fill.new{background:var(--ok)}
+.note{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn);border-radius:10px;padding:12px 14px;font-size:14px}
+/* glossário */
+.search{width:100%;font-size:16px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-bottom:10px}
+.cat{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 6px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:6px}
+summary{cursor:pointer;padding:11px 14px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--muted);font-weight:400}
+details[open] summary::after{content:"–"}
+details .body{padding:0 14px 12px;font-size:15px}
+details .body .ex{font-size:14px;color:var(--muted)}
+code,.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;background:var(--soft);padding:1px 6px;border-radius:6px}
+.formula{display:block;padding:8px 10px;margin:6px 0;white-space:normal;overflow-wrap:anywhere}
+details.conta table{font-size:13px}
+details.conta th,details.conta td{padding:6px 4px}
+.refs li{margin-bottom:8px;font-size:14px}
+details.conta{margin-top:10px;border-color:var(--brand-2)}
+details.conta summary{color:var(--brand)}
+details.conta .formula{display:block}
+.pillar{margin-bottom:14px}
+.pillar h3{margin-top:0}
+footer{margin-top:36px;font-size:13px;color:var(--muted);text-align:center}
+.hidden{display:none}
+@media (min-width:640px){
+  h1{font-size:28px}
+  .flow{grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch}
+  .arrow{align-self:center}
+  .kpi b{font-size:24px}
+}
+</style>
+<style>
+.flow5{display:grid;gap:10px}
+.badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:6px}
+.badge.sint{background:var(--warn-soft);color:var(--warn)}
+.m2{display:grid;grid-template-columns:22px 1fr 1fr;grid-template-rows:auto auto auto;gap:6px}
+.m2 .yax{grid-row:1/3;writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;color:var(--muted);text-align:center;display:flex;align-items:center;justify-content:center}
+.m2 .xax{grid-column:2/4;font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+.q{border-radius:12px;padding:10px;border:1px solid var(--line);background:var(--card)}
+.q b{display:block;font-size:14px}
+.q .n{font-size:12px;color:var(--muted)}
+.q .r{margin-top:6px;font-size:13px}
+.q.hot{background:var(--hot-soft);border-color:var(--hot)}
+.q.hot b{color:var(--hot)}
+.q.ok{background:var(--ok-soft);border-color:var(--ok)}
+.q.ok b{color:var(--ok)}
+.risk .fill{background:var(--brand-2)}
+.risk .fill.hot{background:var(--hot)}
+.score .fill{background:var(--brand)}
+table.txt th,table.txt td{text-align:left}
+table.txt{font-size:13px}
+@media (min-width:640px){.flow5{grid-template-columns:repeat(5,1fr)}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">ENEGEP 2026 · Trabalho 52667</span>
+    <h1>Estudo de cenários prospectivos com Pesquisa Operacional e Inteligência Artificial: uma proposta de consultoria estratégica para PMEs industriais</h1>
+    <p class="authors">Geovane Virmecati · José Bezerra da Silva Filho</p>
+    <p class="when">Área 03 — Pesquisa Operacional · Sessão de pôster STP 04 · 23/10/2026</p>
+  </div>
+</header>
+
+<nav class="chips" aria-label="Seções">
+  <div class="wrap">
+    <a href="#resumo">Resumo</a>
+    <a href="#metodo">Método</a>
+    <a href="#cenarios">Cenários</a>
+    <a href="#avaliacao">Avaliação</a>
+    <a href="#gatilhos">Gatilhos</a>
+    <a href="#calculos">Cálculos</a>
+    <a href="#glossario">Glossário</a>
+    <a href="#referencial">Referencial</a>
+    <a href="#perguntas">Perguntas</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="resumo">
+  <h2>Em 30 segundos</h2>
+  <div class="kpis">
+    <div class="kpi"><b>18%</b><span>das PMEs industriais fazem análise prospectiva estruturada (SEBRAE, 2022)</span></div>
+    <div class="kpi"><b>+23 p.p.</b><span>de sobrevivência em 5 anos com consultoria de planejamento</span></div>
+    <div class="kpi"><b>10:1</b><span>retorno mínimo esperado de um projeto de consultoria (Weiss)</span></div>
+  </div>
+  <div class="card tldr" style="margin-top:12px">
+    <ul style="margin:0;padding-left:18px">
+      <li><b>Problema:</b> à PME industrial faltam o método de cenários e o tempo gerencial para construí-lo. Kubr chama isso de dupla assimetria.</li>
+      <li><b>Proposta:</b> o FRAME-SCEN, framework de 5 etapas e 12 semanas conduzido por consultoria: PESTEL, MICMAC, Monte Carlo, avaliação multicritério e planos com gatilhos.</li>
+      <li><b>Teste:</b> caso hipotético estruturado de uma indústria de alimentos (AlimPro, R$ 28 milhões de faturamento).</li>
+      <li><b>Achado:</b> no cenário “Pressão Máxima”, a chance de o EBITDA ficar abaixo de 5% é de 47%, risco que a descrição em palavras não revela.</li>
+      <li><b>Decisão:</b> nenhuma estratégia domina os quatro cenários. O resultado é um portfólio com planos acionados por gatilhos mensuráveis.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="metodo">
+  <h2>O método: cinco etapas, doze semanas</h2>
+  <div class="flow5">
+    <div class="step"><span class="num">1</span><span class="q">Diagnosticar</span><br><span class="m">PESTEL + PLN</span>
+      <dl><dt>Sai</dt><dd>Inventário de forças motrizes</dd></dl></div>
+    <div class="step"><span class="num">2</span><span class="q">Filtrar</span><br><span class="m">MICMAC</span>
+      <dl><dt>Sai</dt><dd>2 variáveis críticas, que viram os eixos</dd></dl></div>
+    <div class="step"><span class="num">3</span><span class="q">Simular</span><br><span class="m">Monte Carlo · 10.000 iterações</span>
+      <dl><dt>Sai</dt><dd>Perfil de risco de cada cenário</dd></dl></div>
+    <div class="step"><span class="num">4</span><span class="q">Avaliar</span><br><span class="m">Multicritério (AHP) + LLM</span>
+      <dl><dt>Sai</dt><dd>Escore das alternativas estratégicas</dd></dl></div>
+    <div class="step"><span class="num">5</span><span class="q">Acionar</span><br><span class="m">Planos com gatilhos</span>
+      <dl><dt>Sai</dt><dd>Plano por cenário com indicador de disparo</dd></dl></div>
+  </div>
+  <div class="card small" style="margin-top:12px">
+    <p><b>Ciclo do projeto:</b> semanas 1 a 3, diagnóstico e entrevistas · semanas 4 a 8, bloco analítico (etapas 1 a 4) · semanas 9 a 12, entrega, validação com as equipes e pactuação dos planos. Depois, revisão trimestral.</p>
+    <p style="margin:0"><b>Escolha deliberada de métodos:</b> sempre o que a PME consegue alimentar com dados.</p>
+  </div>
+  <div class="card scroll small" style="margin-top:10px">
+    <table class="txt">
+      <thead><tr><th>Necessidade</th><th>Escolhido</th><th>Preterido</th></tr></thead>
+      <tbody>
+        <tr><td>Incerteza nos cenários</td><td>Monte Carlo</td><td>Eventos Discretos</td></tr>
+        <tr><td>Decisão estratégica</td><td>AHP</td><td>ELECTRE / PROMETHEE</td></tr>
+        <tr><td>Alocação de recursos</td><td>Programação Linear</td><td>Não linear / inteira</td></tr>
+        <tr><td>Previsão de variáveis</td><td>ML supervisionado</td><td>Deep learning</td></tr>
+        <tr><td>Informação qualitativa</td><td>PLN básico</td><td>Modelos avançados</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="cenarios">
+  <h2>Aplicação: AlimPro Alimentos <span class="badge sint">caso hipotético</span></h2>
+  <p class="small">Indústria fictícia de alimentos processados (snacks, molhos e congelados) no interior de São Paulo: R$ 28 milhões de faturamento, 187 colaboradores, horizonte 2026-2030.</p>
+  <h3>Etapa 1 · Forças motrizes (PESTEL)</h3>
+  <div class="card scroll small">
+    <table class="txt">
+      <thead><tr><th>Dimensão</th><th>Força motriz</th><th>Natureza</th><th>Intens.</th></tr></thead>
+      <tbody>
+        <tr><td>Econômica</td><td>Volatilidade cambial</td><td>Incerteza crítica</td><td>Alta</td></tr>
+        <tr><td>Econômica</td><td>Custo de commodities agrícolas</td><td>Incerteza crítica</td><td>Alta</td></tr>
+        <tr><td>Social</td><td>Hábitos alimentares (<i>clean label</i>)</td><td>Tendência</td><td>Alta</td></tr>
+        <tr><td>Tecnológica</td><td>Automação e Indústria 4.0</td><td>Tendência</td><td>Média</td></tr>
+        <tr><td>Tecnológica</td><td>E-commerce alimentar</td><td>Tendência</td><td>Média</td></tr>
+        <tr><td>Ambiental</td><td>Regulação de embalagens plásticas</td><td>Incerteza crítica</td><td>Média</td></tr>
+        <tr><td>Legal</td><td>Rotulagem nutricional (RDC 429/2020)</td><td>Tendência</td><td>Alta</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Etapas 2 e 3 · Matriz de cenários e Monte Carlo</h3>
+  <p class="small">O MICMAC escolheu dois eixos: <b>custo de insumos e câmbio</b> (62% do custo do produto vendido) e <b>preferência do consumidor</b>.</p>
+  <div class="card">
+    <div class="m2">
+      <div class="yax">custo de insumos e câmbio: controlado ↑ elevado</div>
+      <div class="q hot"><b>3 · Pressão Máxima</b><span class="n">custo alto + consumidor tradicional</span><div class="r">R$ 29,1 mi · EBITDA 5,3%<br><b style="display:inline">47%</b> de chance de EBITDA &lt; 5%</div></div>
+      <div class="q"><b>4 · Reinvenção Forçada</b><span class="n">custo alto + consumidor saudável</span><div class="r">R$ 33,6 mi · EBITDA 7,1%<br>31% de chance de EBITDA &lt; 5%</div></div>
+      <div class="q"><b>1 · Vento Favorável</b><span class="n">custo controlado + consumidor tradicional</span><div class="r">R$ 38,4 mi · EBITDA 11,2%<br>8% de chance de EBITDA &lt; 5%</div></div>
+      <div class="q ok"><b>2 · Mercado Premium</b><span class="n">custo controlado + consumidor saudável</span><div class="r">R$ 44,7 mi · EBITDA 14,8%<br>4% de chance de EBITDA &lt; 5%</div></div>
+      <div></div>
+      <div class="xax"><span>← tradicional (preço)</span><span>saudável (<i>health-conscious</i>) →</span></div>
+    </div>
+    <p class="legend">Faturamento e EBITDA médios em 2030, com 10.000 iterações por cenário e distribuições triangulares.</p>
+  </div>
+  <h3>Risco de EBITDA abaixo de 5%</h3>
+  <div class="card rank risk">
+    <div class="rk"><div class="lbl"><span>3 · Pressão Máxima</span><b style="color:var(--hot)">47%</b></div><div class="track"><div class="fill hot" style="width:47%"></div></div></div>
+    <div class="rk"><div class="lbl"><span>4 · Reinvenção Forçada</span><b>31%</b></div><div class="track"><div class="fill" style="width:31%"></div></div></div>
+    <div class="rk"><div class="lbl"><span>1 · Vento Favorável</span><b>8%</b></div><div class="track"><div class="fill" style="width:8%"></div></div></div>
+    <div class="rk"><div class="lbl"><span>2 · Mercado Premium</span><b>4%</b></div><div class="track"><div class="fill" style="width:4%"></div></div></div>
+    <p class="legend">Chance de crescer mais de 15% até 2030: 63% (Premium), 41% (Favorável), 22% (Reinvenção), 9% (Pressão Máxima).</p>
+  </div>
+  <p class="small" style="margin-top:10px">“Custos sobem e o consumidor não muda” não soa dramático. Quantificado, o cenário 3 é quase uma moeda ao ar sobre a saúde financeira da empresa.</p>
+</section>
+
+<section id="avaliacao">
+  <h2>Etapa 4 · Avaliação das estratégias</h2>
+  <p class="small">Três alternativas avaliadas com quatro critérios: rentabilidade (peso 0,35), resiliência a cenários adversos (0,30), viabilidade de implementação (0,20) e alinhamento com tendências (0,15).</p>
+  <div class="card scroll small">
+    <table>
+      <thead><tr><th>Alternativa</th><th>Rent.</th><th>Resil.</th><th>Viab.</th><th>Alinh.</th><th>Escore</th></tr></thead>
+      <tbody>
+        <tr><td>A · Clean label</td><td>0,38</td><td>0,29</td><td>0,22</td><td>0,41</td><td>0,321</td></tr>
+        <tr><td>B · Eficiência</td><td>0,31</td><td>0,42</td><td>0,38</td><td>0,18</td><td>0,339</td></tr>
+        <tr><td>C · Canais D2C</td><td>0,31</td><td>0,29</td><td>0,40</td><td>0,41</td><td>0,340</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card rank score" style="margin-top:10px">
+    <div class="rk"><div class="lbl"><span>C · Canais</span><b>0,340</b></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+    <div class="rk"><div class="lbl"><span>B · Eficiência</span><b>0,339</b></div><div class="track"><div class="fill" style="width:99.7%"></div></div></div>
+    <div class="rk"><div class="lbl"><span>A · Clean label</span><b>0,321</b></div><div class="track"><div class="fill" style="width:94.4%"></div></div></div>
+    <p class="legend">Barras em proporção ao maior escore. A distância entre a 1ª e a 3ª é de 0,019.</p>
+  </div>
+  <p class="small" style="margin-top:10px">Com escores tão próximos, a leitura honesta não é eleger um vencedor. Nenhuma estratégia isolada domina os quatro cenários, e por isso a recomendação é um portfólio com ênfase ajustada ao cenário em curso.</p>
+</section>
+
+<section id="gatilhos">
+  <h2>Etapa 5 · Planos de resposta com gatilhos</h2>
+  <div class="card scroll small">
+    <table class="txt">
+      <thead><tr><th>Cenário</th><th>Estratégia prioritária</th><th>Gatilho de acionamento</th></tr></thead>
+      <tbody>
+        <tr><td>1 · Vento Favorável</td><td>Volume + início da linha <i>clean label</i></td><td>Dólar &lt; R$ 5,20 por 2 trimestres seguidos</td></tr>
+        <tr><td>2 · Mercado Premium</td><td>Portfólio premium + canal D2C</td><td>Vendas <i>clean label</i> do setor &gt; 20% ao ano</td></tr>
+        <tr><td>3 · Pressão Máxima</td><td>Automação + corte de SKUs não rentáveis</td><td>EBITDA &lt; 6% por 2 trimestres seguidos</td></tr>
+        <tr><td>4 · Reinvenção Forçada</td><td>Eficiência + inovação incremental</td><td>Insumos &gt; 68% do CPV e <i>clean label</i> &gt; 15% ao ano</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small" style="margin-top:10px"><b>O gatilho é o coração do framework:</b> um indicador mensurável, um limiar definido e um plano já pactuado. É o que separa um relatório que fica na gaveta de um sistema que avisa.</p>
+  <p class="note"><b>Limitações declaradas:</b> a validação é por caso hipotético estruturado, não por aplicação em empresa real; as distribuições vieram de benchmarks setoriais; e o componente de IA foi avaliado de forma qualitativa, sem métrica de acurácia. Próximo passo: aplicação longitudinal em PMEs de diferentes subsetores.</p>
+</section>
+
+<section id="calculos">
+  <h2>Os cálculos, etapa por etapa</h2>
+  <p class="small muted">Cada bloco mostra a conta com os números do trabalho. Onde o artigo não publica o dado de entrada, o exemplo aparece marcado como ilustrativo.</p>
+
+  <details class="conta" open><summary>1 · MICMAC: como se escolhem os eixos</summary><div class="body">
+    <p>Cada força recebe uma nota de influência sobre as demais (0 = nenhuma, 3 = forte). <b>Motricidade</b> é a soma da linha; <b>dependência</b> é a soma da coluna. <i>Exemplo ilustrativo</i> com quatro forças da AlimPro:</p>
+    <div class="scroll"><table>
+      <thead><tr><th>→</th><th>Câmb.</th><th>Comm.</th><th>Clean</th><th>Emb.</th><th>Mot.</th></tr></thead>
+      <tbody>
+        <tr><td>Câmbio</td><td>–</td><td>2</td><td>1</td><td>2</td><td><b>5</b></td></tr>
+        <tr><td>Commod.</td><td>1</td><td>–</td><td>1</td><td>1</td><td>3</td></tr>
+        <tr><td>Clean</td><td>0</td><td>1</td><td>–</td><td>2</td><td>3</td></tr>
+        <tr><td>Embal.</td><td>0</td><td>0</td><td>1</td><td>–</td><td>1</td></tr>
+        <tr><td><b>Dep.</b></td><td>1</td><td>3</td><td>3</td><td><b>5</b></td><td></td></tr>
+      </tbody>
+    </table></div>
+    <p><b>Leitura no plano motricidade × dependência</b><span class="f formula">alta motricidade + baixa dependência → motriz (Câmbio: 5 × 1)</span><span class="f formula">alta nas duas → ligação (Commodities e Clean label: 3 × 3)</span><span class="f formula">baixa motricidade + alta dependência → dependente (Embalagens: 1 × 5)</span>As motrizes e as de ligação com maior incerteza viram os eixos da matriz 2×2.</p>
+    <p class="ex">No MICMAC completo, a matriz também é multiplicada por ela mesma (M², M³…) para captar influências indiretas, daí o “Multiplication Appliquée” do nome. A matriz da AlimPro não está publicada no artigo.</p>
+  </div></details>
+
+  <details class="conta" open><summary>2 · Monte Carlo: de onde sai uma probabilidade</summary><div class="body">
+    <p><b>A ideia:</b> sortear 10.000 vezes as variáveis incertas (câmbio, insumos, demanda), calcular o EBITDA em cada sorteio e contar em quantos ele ficou abaixo de 5%.<span class="f formula">P(EBITDA &lt; 5%) = nº de iterações com EBITDA &lt; 5% ÷ 10.000</span></p>
+    <p><b>Exemplo ilustrativo com uma triangular</b> (mínimo a = 0,5%, mais provável c = 5,2%, máximo b = 10,5%) para o cenário 3:<span class="f formula">média = (a + c + b) / 3 = (0,5 + 5,2 + 10,5) / 3 = 5,4%</span><span class="f formula">P(X &lt; 5) = (5 − a)² / [(b − a)(c − a)] = 4,5² / (10 × 4,7) = 20,25 / 47 = 43%</span>Uma calibração plausível já dá ordem de grandeza próxima dos 47% do artigo. Os parâmetros reais das distribuições não estão publicados.</p>
+    <p><b>Precisão de 10.000 iterações</b><span class="f formula">erro-padrão = √[0,47 × 0,53 / 10.000] = 0,5 p.p.  →  IC 95% ≈ 47% ± 1 p.p.</span></p>
+    <p><b>Os cenários em reais (2030)</b></p>
+    <div class="scroll"><table>
+      <thead><tr><th>Cenário</th><th>Fatur.</th><th>vs. R$ 28 mi</th><th>ao ano</th><th>EBITDA R$</th></tr></thead>
+      <tbody>
+        <tr><td>1 Favorável</td><td>38,4</td><td>+37,1%</td><td>6,5%</td><td>4,30 mi</td></tr>
+        <tr><td>2 Premium</td><td>44,7</td><td>+59,6%</td><td>9,8%</td><td>6,62 mi</td></tr>
+        <tr><td>3 Pressão</td><td>29,1</td><td>+3,9%</td><td>0,8%</td><td>1,54 mi</td></tr>
+        <tr><td>4 Reinvenção</td><td>33,6</td><td>+20,0%</td><td>3,7%</td><td>2,39 mi</td></tr>
+      </tbody>
+    </table></div>
+    <p><span class="f formula">EBITDA R$ = faturamento × margem: 29,1 × 5,3% = 1,54 mi</span><span class="f formula">crescimento ao ano = (29,1 / 28)^(1/5) − 1 = 0,8%</span>Entre o melhor e o pior cenário, o EBITDA anual varia 4,3 vezes: de R$ 1,54 mi para R$ 6,62 mi.</p>
+  </div></details>
+
+  <details class="conta" open><summary>3 · Avaliação multicritério: a soma ponderada</summary><div class="body">
+    <p><b>Os pesos somam 1</b><span class="f formula">0,35 + 0,30 + 0,20 + 0,15 = 1,00</span><b>As prioridades de cada critério também somam 1</b><span class="f formula">Rentab.: 0,38 + 0,31 + 0,31 = 1,00   Resil.: 0,29 + 0,42 + 0,29 = 1,00</span><span class="f formula">Viab.: 0,22 + 0,38 + 0,40 = 1,00   Alinh.: 0,41 + 0,18 + 0,41 = 1,00</span></p>
+    <p><b>Escore = Σ peso × prioridade</b> (com as prioridades de duas casas da tabela)<span class="f formula">A: 0,35×0,38 + 0,30×0,29 + 0,20×0,22 + 0,15×0,41 = 0,3255</span><span class="f formula">B: 0,35×0,31 + 0,30×0,42 + 0,20×0,38 + 0,15×0,18 = 0,3375</span><span class="f formula">C: 0,35×0,31 + 0,30×0,29 + 0,20×0,40 + 0,15×0,41 = 0,3370</span>Com as prioridades arredondadas, B passa à frente de C por 0,0005. Os escores publicados (0,339 e 0,340) põem C à frente por 0,001. Nas duas versões a diferença é menor que o arredondamento, o que confirma a conclusão: nenhuma alternativa domina.</p>
+    <p><b>Análise de sensibilidade</b> — quanto um peso precisa mudar para trocar o líder (os outros pesos são reajustados para a soma continuar 1):</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Peso alterado</th><th>Variação</th><th>Novo líder</th></tr></thead>
+      <tbody>
+        <tr><td>Alinhamento</td><td>+0,002</td><td>C · Canais</td></tr>
+        <tr><td>Resiliência</td><td>−0,003</td><td>C · Canais</td></tr>
+        <tr><td>Viabilidade</td><td>+0,020</td><td>C · Canais</td></tr>
+        <tr><td>Viabilidade</td><td>−0,065</td><td>A · Clean label</td></tr>
+        <tr><td>Rentabilidade</td><td>+0,096</td><td>A · Clean label</td></tr>
+      </tbody>
+    </table></div>
+    <p class="ex">Mudanças de dois ou três milésimos num peso já trocam o primeiro lugar. É por isso que o framework recomenda portfólio e planos por cenário, e não uma aposta única.</p>
+  </div></details>
+
+  <details class="conta" open><summary>4 · AHP: o que o método completo calcula</summary><div class="body">
+    <p><b>Comparações par a par entre os 4 critérios</b><span class="f formula">4 × 3 / 2 = 6 comparações na escala de Saaty (1 a 9)</span></p>
+    <p><b>Pesos pelo autovetor principal</b><span class="f formula">A · w = λmax · w</span></p>
+    <p><b>Consistência</b><span class="f formula">CI = (λmax − 4) / 3     CR = CI / 0,90     aceitar se CR &lt; 0,10</span>0,90 é o índice aleatório (RI) de Saaty para matrizes 4×4.</p>
+    <p class="ex">No artigo, os pesos e as prioridades aparecem já calculados. As matrizes de comparação e a razão de consistência não estão publicadas.</p>
+  </div></details>
+
+  <details class="conta" open><summary>5 · Gatilhos e valor do projeto</summary><div class="body">
+    <p><b>Gatilho do cenário 3 como alerta antecipado</b><span class="f formula">gatilho: EBITDA &lt; 6%  ·  zona de risco: EBITDA &lt; 5%  →  1 p.p. de antecedência</span>O plano dispara antes de a empresa entrar na faixa que a simulação marcou como crítica.</p>
+    <p><b>Gatilho do cenário 4</b><span class="f formula">insumos hoje: 62% do CPV  →  gatilho: 68%  =  +6 p.p.</span></p>
+    <p><b>Regra de valor da consultoria (Weiss, 10:1)</b><span class="f formula">projeto de R$ 80 mil × 10 = R$ 800 mil em valor mensurável</span>Isso equivale a cerca de 2,9% do faturamento anual da AlimPro.</p>
+  </div></details>
+</section>
+
+<section id="glossario">
+  <h2>Glossário: todos os termos</h2>
+  <input class="search" id="q" type="search" placeholder="Buscar termo (ex.: MICMAC, gatilho, EBITDA)" aria-label="Buscar termo">
+  <div id="gl">
+
+  <div class="cat">Cenários prospectivos</div>
+  <details><summary>Cenários prospectivos</summary><div class="body">Descrições de futuros alternativos e igualmente plausíveis. O objetivo não é acertar qual virá, e sim preparar a organização para responder a qualquer um deles.</div></details>
+  <details><summary>Herman Kahn e a RAND Corporation</summary><div class="body">Origem do método, nos anos 1950, para planejamento militar nos Estados Unidos.</div></details>
+  <details><summary>Pierre Wack e a Shell</summary><div class="body">Levou os cenários para o mundo empresarial nos anos 1970. A Shell estava preparada para a crise do petróleo, e esse se tornou um dos casos mais citados de planejamento estratégico.</div></details>
+  <details><summary>Prospectiva × previsão</summary><div class="body">Previsão aposta num número. Prospectiva trabalha com vários futuros possíveis e com o que fazer em cada um.</div></details>
+  <details><summary>Método GBN e eixos de Schwartz</summary><div class="body">Abordagem da Global Business Network, difundida por Peter Schwartz: escolher duas incertezas críticas e cruzá-las numa matriz 2×2, gerando quatro cenários.</div></details>
+  <details><summary>Matriz de cenários 2×2</summary><div class="body">Quadro formado por dois eixos de incerteza, cada um com dois extremos. Aqui: custo de insumos (controlado × elevado) e consumidor (tradicional × saudável).</div></details>
+  <details><summary>Polaridade</summary><div class="body">Cada extremo de um eixo. Combinar as polaridades dos dois eixos gera os quatro cenários.</div></details>
+  <details><summary>Forças motrizes</summary><div class="body">Tendências e incertezas que movem o setor. São classificadas pela origem (macro, meso, micro) e pela natureza (tendência consolidada ou incerteza crítica).</div></details>
+  <details><summary>Tendência consolidada × incerteza crítica</summary><div class="body">Tendência é o que já está em curso e quase certamente continua (rotulagem obrigatória). Incerteza crítica é o que pode ir para lados opostos e muda muito o resultado (câmbio).</div></details>
+  <details><summary>Sinais fracos</summary><div class="body">Indícios iniciais de mudança, ainda pouco visíveis, que podem virar tendência. Conceito de Ansoff (1975).</div></details>
+  <details><summary>Perfil quantitativo de cenário</summary><div class="body">Narrativa do cenário acompanhada da distribuição de probabilidade dos indicadores (faturamento, EBITDA, capital de giro).</div></details>
+
+  <div class="cat">Diagnóstico e variáveis críticas</div>
+  <details><summary>PESTEL</summary><div class="body">Varredura do ambiente externo em seis dimensões: Política, Econômica, Social, Tecnológica, Ambiental (<i>Environmental</i>) e Legal. Deriva do PEST de Aguilar (1967).</div></details>
+  <details><summary>MICMAC</summary><div class="body"><i>Matrice d’Impacts Croisés — Multiplication Appliquée à un Classement</i>, de Michel Godet. Análise estrutural que mede quanto cada variável influencia as outras e quanto é influenciada por elas.</div></details>
+  <details><summary>Matriz de impactos cruzados</summary><div class="body">Tabela em que cada célula indica a força com que a variável da linha influencia a da coluna, geralmente de 0 a 3.</div></details>
+  <details><summary>Motricidade e dependência</summary><div class="body">Motricidade: quanto a variável influencia o sistema (soma da linha). Dependência: quanto ela é influenciada (soma da coluna).</div></details>
+  <details><summary>Variáveis motrizes, de ligação, dependentes e autônomas</summary><div class="body">Motrizes influenciam muito e dependem pouco. De ligação influenciam e dependem muito, e são instáveis. Dependentes são resultado das outras. Autônomas estão quase desconectadas do sistema.</div></details>
+
+  <div class="cat">Pesquisa Operacional</div>
+  <details><summary>Simulação de Monte Carlo</summary><div class="body">Sorteia milhares de vezes os valores incertos e calcula o resultado em cada sorteio. Entrega um perfil de risco, e não um número único.</div></details>
+  <details><summary>Iteração</summary><div class="body">Cada sorteio da simulação. Aqui foram 10.000 por cenário.</div></details>
+  <details><summary>Distribuições normal, triangular e uniforme</summary><div class="body">Normal: em forma de sino, para quando há histórico. Triangular: definida por mínimo, mais provável e máximo, para quando só há estimativas de especialistas. Uniforme: qualquer valor da faixa é igualmente provável.</div></details>
+  <details><summary>Simulação de Eventos Discretos (preterida)</summary><div class="body">Simula filas e processos evento a evento. Foi deixada de lado porque as variáveis do problema (custo, demanda) são contínuas e a modelagem seria mais pesada.</div></details>
+  <details><summary>Análise de Decisão Multicritério (MCDA)</summary><div class="body">Métodos para escolher entre alternativas com vários critérios em conflito: rentabilidade, risco, viabilidade, alinhamento.</div></details>
+  <details><summary>AHP — Analytic Hierarchy Process</summary><div class="body">Método de Saaty (1980): compara critérios e alternativas aos pares numa escala de 1 a 9, extrai os pesos pelo autovetor e verifica a coerência pela razão de consistência (CR &lt; 0,10).</div></details>
+  <details><summary>Soma ponderada</summary><div class="body">Escore = soma de (peso do critério × desempenho da alternativa). É a agregação final do AHP e de vários outros métodos.</div></details>
+  <details><summary>Prioridade local</summary><div class="body">Desempenho relativo de uma alternativa dentro de um critério. Em cada critério, as prioridades das três alternativas somam 1.</div></details>
+  <details><summary>Análise de sensibilidade</summary><div class="body">Mudar um parâmetro, como um peso, e ver se o resultado muda. Se uma variação pequena troca o líder, a decisão não é robusta.</div></details>
+  <details><summary>ELECTRE e PROMETHEE (preteridos)</summary><div class="body">Métodos de sobreclassificação da escola francesa. São mais exigentes em parâmetros (limiares de preferência e veto) e mais difíceis de explicar ao decisor da PME.</div></details>
+  <details><summary>Programação Linear</summary><div class="body">Otimização com função objetivo e restrições lineares. Usada para alocar capacidade, mix de produtos e investimentos dentro de cada cenário.</div></details>
+
+  <div class="cat">Inteligência Artificial</div>
+  <details><summary>PLN — Processamento de Linguagem Natural</summary><div class="body">Técnicas para o computador ler textos. Aqui faz a triagem de relatórios setoriais, normas e notícias no diagnóstico PESTEL, como um radar de tendências.</div></details>
+  <details><summary>LLM — modelo de linguagem de grande escala</summary><div class="body">Modelos como os da família GPT. No framework, sintetizam as narrativas dos cenários e propõem alternativas de resposta.</div></details>
+  <details><summary>Aprendizado de máquina supervisionado</summary><div class="body">Modelos que aprendem com exemplos rotulados para prever uma variável. Foi preferido ao deep learning por exigir menos dados e ser mais interpretável.</div></details>
+  <details><summary>Deep learning (preterido)</summary><div class="body">Redes neurais profundas. São poderosas, mas pedem muito dado e são pouco interpretáveis, o que não combina com a realidade de dados de uma PME.</div></details>
+
+  <div class="cat">Gestão e finanças</div>
+  <details><summary>EBITDA e margem EBITDA</summary><div class="body">Lucro antes de juros, impostos, depreciação e amortização: mede a geração de caixa operacional. A margem é o EBITDA dividido pelo faturamento.</div></details>
+  <details><summary>CPV — Custo dos Produtos Vendidos</summary><div class="body">Custo direto de produzir o que foi vendido. Na AlimPro, insumos e câmbio pesam 62% do CPV.</div></details>
+  <details><summary>Capital de giro</summary><div class="body">Recursos para financiar a operação do dia a dia: estoques, prazo dado a clientes menos prazo obtido de fornecedores.</div></details>
+  <details><summary>Clean label</summary><div class="body">Produtos com lista de ingredientes curta e reconhecível, sem aditivos artificiais.</div></details>
+  <details><summary>D2C (direct-to-consumer)</summary><div class="body">Venda direta da indústria ao consumidor final, geralmente on-line, sem passar pelo varejo.</div></details>
+  <details><summary>Atacarejo</summary><div class="body">Formato misto de atacado e varejo, com preço baixo e volume.</div></details>
+  <details><summary>SKU</summary><div class="body"><i>Stock Keeping Unit</i>: cada item distinto do portfólio. Cortar SKUs não rentáveis simplifica a produção e libera margem.</div></details>
+  <details><summary>RDC 429/2020</summary><div class="body">Resolução da Anvisa que tornou obrigatória a nova rotulagem nutricional, com selo frontal de alto teor de açúcar, sódio e gordura.</div></details>
+  <details><summary>Indústria 4.0</summary><div class="body">Automação e digitalização de linhas de produção com sensores, dados e conectividade.</div></details>
+
+  <div class="cat">Consultoria e planos</div>
+  <details><summary>Gatilho de acionamento</summary><div class="body">Indicador mensurável com limiar definido que, quando atingido, sinaliza que um cenário está se materializando e ativa o plano já pactuado.</div></details>
+  <details><summary>Plano de resposta</summary><div class="body">Para cada cenário: iniciativas prioritárias, responsáveis, métricas e gatilho. Não é um plano único “para o pior caso”.</div></details>
+  <details><summary>Matriz de decisão estratégica</summary><div class="body">Quadro que mostra como cada alternativa se comporta em cada cenário. Vira referência sempre que um indicador externo se move.</div></details>
+  <details><summary>Relatório executivo de cenários</summary><div class="body">Entrega com os perfis quantitativos e narrativos dos quatro cenários e as forças motrizes que os determinam.</div></details>
+  <details><summary>Dupla assimetria (Kubr)</summary><div class="body">À PME faltam as ferramentas e falta o tempo gerencial para desenvolvê-las.</div></details>
+  <details><summary>Distância de valor (Weiss)</summary><div class="body">Quanto maior a lacuna entre a capacidade analítica necessária e a disponível, maior o valor que a consultoria pode gerar.</div></details>
+  <details><summary>Conhecimento tácito × estruturado</summary><div class="body">Tácito é a experiência na cabeça dos gestores. Estruturado são modelos, cenários e planos escritos. A consultoria faz a passagem de um para o outro.</div></details>
+  <details><summary>Retorno 10:1</summary><div class="body">Regra de Weiss: o projeto deve gerar ao cliente pelo menos dez vezes o que custou, em valor mensurável.</div></details>
+
+  <div class="cat">Metodologia científica</div>
+  <details><summary>Caso hipotético estruturado</summary><div class="body">Empresa fictícia construída com dados plausíveis do setor para testar se o encadeamento das etapas produz resultados utilizáveis. Não substitui a aplicação em empresa real.</div></details>
+  <details><summary>Abordagem qualitativo-quantitativa</summary><div class="body">Parte de análise qualitativa (PESTEL, narrativas) e ancora cada etapa em métodos quantitativos (MICMAC, Monte Carlo, multicritério).</div></details>
+  <details><summary>Trade-off metodológico</summary><div class="body">Abrir mão de sofisticação analítica em troca de viabilidade prática: usar o método que a PME consegue alimentar com dados.</div></details>
+  <details><summary>Replicabilidade</summary><div class="body">Capacidade de outra equipe de consultoria aplicar o mesmo processo e chegar a artefatos comparáveis.</div></details>
+  <details><summary>Estudo longitudinal</summary><div class="body">Acompanhar as mesmas empresas ao longo do tempo para verificar se os cenários e os gatilhos funcionaram. É o próximo passo proposto.</div></details>
+  <p id="semres" class="muted small hidden">Nenhum termo encontrado.</p>
+  </div>
+</section>
+
+<section id="referencial">
+  <h2>Referencial teórico e metodológico</h2>
+  <div class="card pillar">
+    <h3>Pilar 1 · Cenários prospectivos</h3>
+    <p class="small">Da origem com Kahn (RAND) à adaptação empresarial de Wack (1985) na Shell. Schwartz (1991) e o método de eixos, Godet (2000) e Godet e Durance (2011) com a análise estrutural MICMAC, Porter (1985) sobre vantagem competitiva e Ansoff (1975) sobre sinais fracos.</p>
+  </div>
+  <div class="card pillar">
+    <h3>Pilar 2 · Pesquisa Operacional e IA no processo prospectivo</h3>
+    <p class="small">Monte Carlo para transformar incerteza em perfil de risco (Mooney, 1997). Multicritério com AHP (Saaty, 1980; Hwang e Yoon, 1981). Programação Linear para alocação (Hillier e Lieberman, 2013). IA com PLN como radar de tendências e LLMs para síntese (Russell e Norvig, 2021; Goodfellow, Bengio e Courville, 2016; Brown et al., 2020).</p>
+  </div>
+  <div class="card pillar">
+    <h3>Pilar 3 · Consultoria como agente de capacitação</h3>
+    <p class="small">Weiss (2017): o consultor melhora a condição do cliente, a distância de valor e a regra de retorno de 10:1. Kubr (2002): a dupla assimetria da PME. Dados do SEBRAE (2022), FDC (2023), CNI (2024) e IBGE sobre o porte e a sobrevivência das PMEs.</p>
+  </div>
+  <div class="card pillar">
+    <h3>Desenho da pesquisa</h3>
+    <p class="small">Proposta metodológica construída por revisão bibliográfica (Gil, 2010; Marconi e Lakatos, 2021), com abordagem qualitativo-quantitativa e validação por caso hipotético estruturado. Dados do setor: ABIA (2024) e IBGE (2024).</p>
+  </div>
+  <h3>Referências</h3>
+  <ol class="refs">
+    <li>ABIA. <i>Relatório Anual da Indústria de Alimentos e Bebidas 2024</i>.</li>
+    <li>AGUILAR, F. J. <i>Scanning the business environment</i>. Macmillan, 1967.</li>
+    <li>ANSOFF, H. I. Managing strategic surprise by response to weak signals. <i>California Management Review</i>, v. 18, n. 2, 1975.</li>
+    <li>BROWN, T. et al. Language models are few-shot learners. <i>NeurIPS</i>, v. 33, 2020.</li>
+    <li>CNI. <i>Sondagem Especial: Desafios Competitivos das PMEs Industriais Brasileiras</i>, 2024.</li>
+    <li>FDC. <i>Relatório de Competitividade das PMEs Brasileiras</i>, 2023.</li>
+    <li>GIL, A. C. <i>Como elaborar projetos de pesquisa</i>. 5. ed. Atlas, 2010.</li>
+    <li>GODET, M. The art of scenarios and strategic planning: tools and pitfalls. <i>Technological Forecasting and Social Change</i>, v. 65, n. 1, 2000.</li>
+    <li>GODET, M.; DURANCE, P. <i>A prospectiva estratégica: para as empresas e os territórios</i>. Dunod, 2011.</li>
+    <li>GOODFELLOW, I.; BENGIO, Y.; COURVILLE, A. <i>Deep learning</i>. MIT Press, 2016.</li>
+    <li>HILLIER, F. S.; LIEBERMAN, G. J. <i>Introduction to operations research</i>. 10. ed. McGraw-Hill, 2013.</li>
+    <li>HWANG, C. L.; YOON, K. <i>Multiple attribute decision making</i>. Springer, 1981.</li>
+    <li>IBGE. <i>Cadastro Central de Empresas 2023</i>; <i>Pesquisa Industrial Anual — Empresa 2024</i>.</li>
+    <li>KUBR, M. (ed.). <i>Management consulting: a guide to the profession</i>. 4. ed. OIT, 2002.</li>
+    <li>MARCONI, M. A.; LAKATOS, E. M. <i>Fundamentos de metodologia científica</i>. 8. ed. Atlas, 2021.</li>
+    <li>MOONEY, C. Z. <i>Monte Carlo simulation</i>. Sage, 1997.</li>
+    <li>PORTER, M. E. <i>Competitive advantage</i>. Free Press, 1985.</li>
+    <li>RUSSELL, S.; NORVIG, P. <i>Artificial intelligence: a modern approach</i>. 4. ed. Pearson, 2021.</li>
+    <li>SAATY, T. L. <i>The analytic hierarchy process</i>. McGraw-Hill, 1980.</li>
+    <li>SCHWARTZ, P. <i>The art of the long view</i>. Currency Doubleday, 1991.</li>
+    <li>SEBRAE. <i>Sobrevivência das empresas no Brasil — Relatório 2022</i>.</li>
+    <li>WACK, P. Scenarios: uncharted waters ahead. <i>Harvard Business Review</i>, v. 63, n. 5, 1985.</li>
+    <li>WEISS, A. <i>A Bíblia da consultoria</i>. Autêntica Business, 2017.</li>
+  </ol>
+</section>
+
+<section id="perguntas">
+  <h2>Perguntas frequentes</h2>
+  <details><summary>O que é o FRAME-SCEN, em uma frase?</summary><div class="body">Um roteiro de 5 etapas e 12 semanas para uma consultoria construir, com a equipe da PME, cenários de futuro com números, escolher estratégias e deixar planos prontos com gatilhos de disparo.</div></details>
+  <details><summary>Por que cenários e não uma previsão?</summary><div class="body">Porque em ambiente volátil a previsão pontual erra, e o plano feito em cima dela também. Com cenários, a empresa sabe o que fazer em cada futuro possível e reconhece cedo qual está chegando.</div></details>
+  <details><summary>Por que uma empresa fictícia?</summary><div class="body">O objetivo desta etapa era testar se o encadeamento das cinco etapas produz artefatos utilizáveis no porte de uma PME. A aplicação em empresas reais, acompanhada ao longo do tempo, é o próximo passo declarado.</div></details>
+  <details><summary>Por que o cenário 3 é o achado principal?</summary><div class="body">Porque, descrito em palavras (“custos sobem e o consumidor não muda”), ele não parece grave. A simulação mostra 47% de chance de EBITDA abaixo de 5%, quase uma moeda ao ar. É o tipo de risco que a análise qualitativa não revela.</div></details>
+  <details><summary>Por que não escolher a estratégia com maior escore?</summary><div class="body">Os três escores estão numa faixa de 0,019, e um ajuste de dois milésimos num único peso já troca o líder. Escolher um vencedor seria precisão falsa. O framework recomenda portfólio, com a ênfase ajustada pelo cenário que se materializar.</div></details>
+  <details><summary>O que é um gatilho e por que ele importa?</summary><div class="body">É um indicador com limiar definido, como “EBITDA abaixo de 6% por dois trimestres”. Quando ele dispara, o plano daquele cenário já está pactuado: a empresa age antes de ser surpreendida.</div></details>
+  <details><summary>Qual é o papel da IA, de fato?</summary><div class="body">Dois: ler e triar grande volume de fontes no diagnóstico (PLN) e sintetizar alternativas estratégicas a partir das narrativas dos cenários (LLM). Ambos reduzem tempo de diagnóstico. A acurácia ainda não foi medida, e isso está declarado como limitação.</div></details>
+  <details><summary>Por que métodos mais simples (Monte Carlo, AHP, Programação Linear)?</summary><div class="body">Porque PME raramente tem séries longas de dados nem equipe analítica. Método que a empresa não consegue alimentar não roda. A escolha foi deliberada: sofisticação suficiente, com viabilidade.</div></details>
+  <details><summary>Que dados minha empresa precisaria fornecer?</summary><div class="body">Faturamento, margens e estrutura de custos dos últimos anos, composição do custo dos produtos (quanto depende de insumos e câmbio), canais de venda e acesso aos gestores para entrevistas e oficinas. Os dados externos vêm de relatórios setoriais e fontes públicas.</div></details>
+  <details><summary>Quanto tempo leva?</summary><div class="body">Cerca de 12 semanas: 3 de diagnóstico, 5 de análise e 4 de entrega e pactuação. Depois, revisão trimestral dos indicadores e dos gatilhos.</div></details>
+  <details><summary>Quais são as limitações e os próximos passos?</summary><div class="body">Limitações: caso hipotético, distribuições calibradas por benchmark setorial e componente de IA avaliado de forma qualitativa. Próximos passos: aplicação longitudinal em PMEs reais de vários subsetores, um protocolo para calibrar distribuições com pouco dado histórico e modelos de IA específicos para manufatura.</div></details>
+</section>
+
+<footer>
+  XLVI ENEGEP · São Paulo, 20 a 23 de outubro de 2026 · Trabalho 52667<br>
+  Geovane Virmecati · José Bezerra da Silva Filho
+</footer>
+</main>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), box=document.getElementById('gl'), none=document.getElementById('semres');
+  var norm=function(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();};
+  q.addEventListener('input',function(){
+    var t=norm(q.value.trim()), any=false;
+    box.querySelectorAll('details').forEach(function(d){
+      var hit=!t||norm(d.textContent).indexOf(t)>-1;
+      d.classList.toggle('hidden',!hit); if(hit) any=true;
+      d.open=!!t&&hit&&norm(d.querySelector('summary').textContent).indexOf(t)>-1;
+    });
+    box.querySelectorAll('.cat').forEach(function(c){
+      var n=c.nextElementSibling, show=false;
+      while(n&&n.tagName==='DETAILS'){ if(!n.classList.contains('hidden')) show=true; n=n.nextElementSibling; }
+      c.classList.toggle('hidden',!show);
+    });
+    none.classList.toggle('hidden',any);
+  });
+})();
+</script>
+</body>
+</html>
