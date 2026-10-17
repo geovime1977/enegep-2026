@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recursos do PNE 2026-2036</title>
+<meta name="description" content="ENEGEP 2026 · trabalho 52666 · AHP, DEA, Programação por Metas Estocástica e Monte Carlo para alocar recursos do PNE: conceitos, método, glossário e referências.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Recursos do PNE 2026-2036: AHP, DEA, Metas Estocásticas e Monte Carlo">
+<meta property="og:description" content="Distribuir por matrícula não enxerga eficiência. Método, piloto com dados reais de 12 municípios fluminenses, glossário e referencial do trabalho 52666 do ENEGEP 2026.">
+<meta property="og:url" content="https://geovime1977.github.io/enegep-2026/52666/">
+<meta property="og:image" content="https://geovime1977.github.io/enegep-2026/52666/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{
+  --bg:#f5f7fb; --card:#ffffff; --ink:#14213d; --muted:#5b6782; --line:#dde3ef;
+  --brand:#13306b; --brand-2:#2357c6; --soft:#e9eff9; --hot:#c2410c; --hot-soft:#fff1e8;
+  --ok:#0f7a4a; --ok-soft:#e6f5ed; --warn:#8a5a00; --warn-soft:#fff7e0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1424; --card:#152038; --ink:#e7ecf6; --muted:#9aa7c2; --line:#26334f;
+    --brand:#8fb0ff; --brand-2:#8fb0ff; --soft:#1b2946; --hot:#ff9a5c; --hot-soft:#3a2416;
+    --ok:#5fd39a; --ok-soft:#14321f; --warn:#f2c35b; --warn-soft:#352a10;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1424; --card:#152038; --ink:#e7ecf6; --muted:#9aa7c2; --line:#26334f;
+  --brand:#8fb0ff; --brand-2:#8fb0ff; --soft:#1b2946; --hot:#ff9a5c; --hot-soft:#3a2416;
+  --ok:#5fd39a; --ok-soft:#14321f; --warn:#f2c35b; --warn-soft:#352a10;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
+header.hero{background:#13306b;color:#fff;padding:28px 16px 24px}
+header.hero .wrap{padding-bottom:0}
+.tag{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.14);padding:4px 10px;border-radius:999px}
+h1{font-size:23px;line-height:1.25;margin:12px 0 10px}
+.authors{font-size:14px;opacity:.9;margin:0}
+.when{font-size:13px;opacity:.75;margin:6px 0 0}
+nav.chips{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.chips .wrap{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+nav.chips .wrap::-webkit-scrollbar{display:none}
+nav.chips a{flex:0 0 auto;font-size:13px;text-decoration:none;color:var(--brand);background:var(--soft);padding:6px 12px;border-radius:999px;white-space:nowrap}
+section{margin-top:28px}
+h2{font-size:19px;margin:0 0 12px;color:var(--brand)}
+h3{font-size:16px;margin:18px 0 8px}
+p{margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center}
+.kpi b{display:block;font-size:20px;color:var(--brand)}
+.kpi span{font-size:12px;color:var(--muted);line-height:1.3;display:block;margin-top:2px}
+.tldr{border-left:4px solid var(--brand-2)}
+.tldr li{margin-bottom:6px}
+/* fluxo do método */
+.flow{display:grid;gap:10px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative}
+.step .num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#13306b;color:#fff;font-weight:700;font-size:14px;margin-right:8px}
+.step .q{font-weight:700}
+.step .m{display:inline-block;margin-top:6px;font-size:13px;background:var(--soft);color:var(--brand);padding:3px 10px;border-radius:999px}
+.step dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:10px 0 0;font-size:14px}
+.step dt{color:var(--muted)}
+.step dd{margin:0}
+.arrow{text-align:center;color:var(--muted);font-size:18px;line-height:1}
+/* barras de utilização */
+.bars{display:grid;gap:12px}
+.bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.track{position:relative;height:14px;border-radius:7px;background:var(--soft);overflow:visible}
+.fill{height:100%;border-radius:7px;background:var(--brand-2)}
+.fill.hot{background:var(--hot)}
+.limit{position:absolute;right:0;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.5}
+.legend{font-size:12px;color:var(--muted);margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font-size:12px;color:var(--muted);font-weight:600}
+td.hl{color:var(--hot);font-weight:700}
+.scroll{overflow-x:auto}
+/* ranking */
+.rank{display:grid;gap:10px}
+.rk .lbl{display:flex;justify-content:space-between;gap:8px;font-size:14px;margin-bottom:4px}
+.rk .fill{background:var(--brand)}
+.rk.top .fill{background:var(--ok)}
+/* antes/depois */
+.ba{display:grid;gap:12px}
+.ba .row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;font-size:14px}
+.ba .row .t{grid-column:1/3;display:flex;justify-content:space-between}
+.pill{font-size:12px;padding:2px 8px;border-radius:999px}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.duo{display:grid;gap:4px}
+.duo .track{height:10px}
+.duo .fill.now{background:var(--muted)}
+.duo .fill.new{background:var(--ok)}
+.note{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn);border-radius:10px;padding:12px 14px;font-size:14px}
+/* glossário */
+.search{width:100%;font-size:16px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-bottom:10px}
+.cat{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 6px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:6px}
+summary{cursor:pointer;padding:11px 14px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--muted);font-weight:400}
+details[open] summary::after{content:"–"}
+details .body{padding:0 14px 12px;font-size:15px}
+details .body .ex{font-size:14px;color:var(--muted)}
+code,.f{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;background:var(--soft);padding:1px 6px;border-radius:6px}
+.formula{display:block;padding:8px 10px;margin:6px 0;overflow-x:auto;white-space:nowrap}
+.refs li{margin-bottom:8px;font-size:14px}
+details.conta{margin-top:10px;border-color:var(--brand-2)}
+details.conta summary{color:var(--brand)}
+details.conta .formula{display:block}
+.pillar{margin-bottom:14px}
+.pillar h3{margin-top:0}
+footer{margin-top:36px;font-size:13px;color:var(--muted);text-align:center}
+.hidden{display:none}
+@media (min-width:640px){
+  h1{font-size:28px}
+  .flow{grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch}
+  .arrow{align-self:center}
+  .kpi b{font-size:24px}
+}
+</style>
+<style>
+.flow4{display:grid;gap:10px}
+.badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:6px}
+.badge.real{background:var(--ok-soft);color:var(--ok)}
+.badge.sint{background:var(--warn-soft);color:var(--warn)}
+.chart{width:100%;height:auto;display:block}
+.chart text{font:11px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;fill:var(--muted)}
+.chart .lb{fill:var(--ink);font-weight:600}
+.chart .ax{stroke:var(--line)}
+.chart .fr{fill:var(--ok)}
+.chart .in{fill:var(--hot)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:4px}
+.legend2{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+td.fr{color:var(--ok);font-weight:700}
+.strat .fill.a{background:var(--muted)}
+.strat .fill.b{background:var(--brand-2)}
+.strat .fill.c{background:var(--ok)}
+@media (min-width:640px){.flow4{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">ENEGEP 2026 · Trabalho 52666</span>
+    <h1>Alocação ótima sob incerteza dos recursos do Plano Nacional de Educação 2026-2036</h1>
+    <p class="authors">Cristiane Cruz de Oliveira · Geovane Virmecati · José Bezerra da Silva Filho</p>
+    <p class="when">Área 03 — Pesquisa Operacional · Sessão de pôster STP 03 · 22/10/2026</p>
+  </div>
+</header>
+
+<nav class="chips" aria-label="Seções">
+  <div class="wrap">
+    <a href="#resumo">Resumo</a>
+    <a href="#metodo">Método</a>
+    <a href="#piloto">Piloto real</a>
+    <a href="#alocacao">Alocação</a>
+    <a href="#robustez">Robustez</a>
+    <a href="#glossario">Glossário</a>
+    <a href="#referencial">Referencial</a>
+    <a href="#perguntas">Perguntas</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="resumo">
+  <h2>Em 30 segundos</h2>
+  <div class="kpis">
+    <div class="kpi"><b>73</b><span>metas do PNE para cumprir em 10 anos</span></div>
+    <div class="kpi"><b>5.570</b><span>municípios como unidades de decisão</span></div>
+    <div class="kpi"><b>10% do PIB</b><span>meta de financiamento até 2035 (hoje 5,5%)</span></div>
+  </div>
+  <div class="card tldr" style="margin-top:12px">
+    <ul style="margin:0;padding-left:18px">
+      <li><b>Problema:</b> o FUNDEB distribui pelo número de matrículas. Esse critério não enxerga eficiência do gasto, desigualdade regional nem a dependência entre metas.</li>
+      <li><b>Proposta:</b> um framework de quatro módulos de Pesquisa Operacional: ponderar as metas, medir a eficiência, alocar sob incerteza e testar a robustez.</li>
+      <li><b>Dado real:</b> no piloto com 12 municípios fluminenses, Miracema gasta R$ 10,5 mil por aluno e tem IDEB 7,9. Niterói gasta R$ 15,8 mil e tem 5,9.</li>
+      <li><b>Instância sintética:</b> o framework atinge 93% das metas, contra 64% da regra por matrícula, gastando 0,7 ponto percentual do PIB a menos.</li>
+    </ul>
+  </div>
+  <p class="note" style="margin-top:12px"><b>O que é real e o que é sintético.</b> O diagnóstico de eficiência do piloto usa dados reais do INEP e do SIOPE. Os resultados de alocação (93%, robustez de 84%, economia estimada) vêm de uma instância sintética de 50 municípios e 10 metas, montada para isolar o efeito da regra de distribuição.</p>
+</section>
+
+<section id="metodo">
+  <h2>O método: quatro módulos encadeados</h2>
+  <p class="small muted">A saída de cada módulo alimenta o seguinte.</p>
+  <div class="flow4">
+    <div class="step">
+      <span class="num">1</span><span class="q">Ponderar</span><br>
+      <span class="m">AHP em dois níveis</span>
+      <dl><dt>Pergunta</dt><dd>Quanto vale cada meta?</dd><dt>Sai</dt><dd>Peso wᵢ de cada meta</dd></dl>
+    </div>
+    <div class="step">
+      <span class="num">2</span><span class="q">Medir</span><br>
+      <span class="m">DEA BCC orientado a output</span>
+      <dl><dt>Pergunta</dt><dd>Quem transforma gasto em aprendizagem?</dd><dt>Sai</dt><dd>Eficiência θⱼ por município</dd></dl>
+    </div>
+    <div class="step">
+      <span class="num">3</span><span class="q">Alocar</span><br>
+      <span class="m">Programação por Metas Estocástica</span>
+      <dl><dt>Pergunta</dt><dd>Quanto vai para cada meta, município e ano?</dd><dt>Sai</dt><dd>Plano de dotação xᵢⱼₜ</dd></dl>
+    </div>
+    <div class="step">
+      <span class="num">4</span><span class="q">Validar</span><br>
+      <span class="m">Monte Carlo · 10.000 cenários</span>
+      <dl><dt>Pergunta</dt><dd>O plano resiste a choques de PIB?</dd><dt>Sai</dt><dd>Probabilidade de cumprir as metas</dd></dl>
+    </div>
+  </div>
+  <div class="card small" style="margin-top:12px">
+    <p><b>Como os módulos se conectam.</b> Os pesos do AHP entram na função objetivo da alocação. O escore de eficiência do DEA encarece o custo unitário dos municípios ineficientes: <span class="f">c′ = c / θ<sup>γ</sup></span>. Com isso, gestão eficiente “compra” mais meta com o mesmo real.</p>
+    <p style="margin:0"><b>Duas restrições de política pública:</b> o orçamento precisa ser suficiente em 95% dos cenários desfavoráveis de PIB, e os municípios com IDHM abaixo da mediana recebem pelo menos 1,2 vez o piso.</p>
+  </div>
+</section>
+
+<section id="piloto">
+  <h2>Piloto com dados reais <span class="badge real">dado real</span></h2>
+  <p class="small">12 municípios do Estado do Rio de Janeiro, escolhidos para cobrir diferentes portes e desempenhos. <b>Insumos:</b> gasto por aluno e alunos por docente. <b>Produtos:</b> IDEB 2023 dos anos iniciais (AI) e finais (AF) da rede municipal.</p>
+  <div class="card">
+    <svg class="chart" viewBox="0 0 340 240" role="img" aria-label="Gasto por aluno versus IDEB dos anos iniciais nos 12 municípios">
+      <line class="ax" x1="40" y1="210" x2="330" y2="210"/><line class="ax" x1="40" y1="20" x2="40" y2="210"/>
+      <line class="ax" x1="40" y1="164.8" x2="330" y2="164.8" stroke-dasharray="2 4"/><line class="ax" x1="40" y1="119.5" x2="330" y2="119.5" stroke-dasharray="2 4"/><line class="ax" x1="40" y1="74.3" x2="330" y2="74.3" stroke-dasharray="2 4"/><line class="ax" x1="40" y1="29" x2="330" y2="29" stroke-dasharray="2 4"/>
+      <text x="34" y="214" text-anchor="end">4</text><text x="34" y="169" text-anchor="end">5</text><text x="34" y="123" text-anchor="end">6</text><text x="34" y="78" text-anchor="end">7</text><text x="34" y="33" text-anchor="end">8</text>
+      <text x="60.7" y="226" text-anchor="middle">10</text><text x="143.6" y="226" text-anchor="middle">12</text><text x="226.4" y="226" text-anchor="middle">14</text><text x="309.3" y="226" text-anchor="middle">16</text>
+      <text x="185" y="239" text-anchor="middle">gasto por aluno (R$ mil/ano)</text>
+      <text x="10" y="120" text-anchor="middle" transform="rotate(-90 10 120)">IDEB anos iniciais</text>
+      <circle class="fr" cx="81.4" cy="33.6" r="6"/><text class="lb" x="90" y="30">Miracema</text>
+      <circle class="fr" cx="52.4" cy="74.3" r="5"/>
+      <circle class="fr" cx="110.4" cy="87.9" r="5"/>
+      <circle class="in" cx="64.9" cy="96.9" r="5"/>
+      <circle class="in" cx="135.3" cy="96.9" r="5"/>
+      <circle class="in" cx="205.7" cy="128.6" r="5"/>
+      <circle class="fr" cx="234.7" cy="137.6" r="5"/><text x="242" y="150">Rio</text>
+      <circle class="in" cx="301" cy="124" r="6"/><text class="lb" x="296" y="112" text-anchor="end">Niterói</text>
+      <circle class="in" cx="122.9" cy="155.7" r="5"/>
+      <circle class="fr" cx="110.4" cy="160.2" r="5"/>
+      <circle class="in" cx="93.9" cy="187.4" r="5"/>
+      <circle class="fr" cx="77.3" cy="196.4" r="5"/><text x="86" y="204">Japeri</text>
+    </svg>
+    <div class="legend2"><span><span class="dot" style="background:var(--ok)"></span>na fronteira (θ = 1)</span><span><span class="dot" style="background:var(--hot)"></span>ineficiente (θ &lt; 1)</span></div>
+    <p class="legend">O gráfico mostra só duas das quatro variáveis. O DEA usa as quatro ao mesmo tempo, por isso um ponto que parece fraco aqui pode estar na fronteira.</p>
+  </div>
+  <div class="card scroll" style="margin-top:12px">
+    <table>
+      <thead><tr><th>Município</th><th>Gasto (R$ mil)</th><th>Alunos/ docente</th><th>IDEB AI</th><th>IDEB AF</th><th>θ</th></tr></thead>
+      <tbody>
+        <tr><td>Miracema</td><td>10,5</td><td>7,2</td><td>7,9</td><td>6,5</td><td class="fr">1,0000</td></tr>
+        <tr><td>Comd. Levy Gasparian</td><td>9,8</td><td>6,8</td><td>7,0</td><td>5,8</td><td class="fr">1,0000</td></tr>
+        <tr><td>Itaperuna</td><td>11,2</td><td>6,5</td><td>6,7</td><td>5,8</td><td class="fr">1,0000</td></tr>
+        <tr><td>Rio de Janeiro</td><td>14,2</td><td>5,8</td><td>5,6</td><td>5,2</td><td class="fr">1,0000</td></tr>
+        <tr><td>Duque de Caxias</td><td>11,2</td><td>5,7</td><td>5,1</td><td>4,6</td><td class="fr">1,0000</td></tr>
+        <tr><td>Japeri</td><td>10,4</td><td>5,4</td><td>4,3</td><td>4,0</td><td class="fr">1,0000</td></tr>
+        <tr><td>São Gonçalo</td><td>10,8</td><td>5,5</td><td>4,5</td><td>4,2</td><td>0,9954</td></tr>
+        <tr><td>Nova Iguaçu</td><td>11,5</td><td>5,9</td><td>5,2</td><td>4,8</td><td>0,9707</td></tr>
+        <tr><td><b>Niterói</b></td><td>15,8</td><td>6,1</td><td>5,9</td><td>5,1</td><td class="hl">0,9683</td></tr>
+        <tr><td>Volta Redonda</td><td>13,5</td><td>6,3</td><td>5,8</td><td>5,4</td><td>0,9534</td></tr>
+        <tr><td>Iguaba Grande</td><td>11,8</td><td>6,9</td><td>6,5</td><td>5,5</td><td>0,8840</td></tr>
+        <tr><td>Cambuci</td><td>10,1</td><td>7,0</td><td>6,5</td><td>5,2</td><td>0,8800</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small" style="margin-top:10px">Fontes: IDEB/INEP 2023, SIOPE/FNDE 2023, Censo Escolar INEP 2024 e Anuário Brasileiro da Educação Básica 2024. Média de eficiência do piloto: θ = 0,971. Seis dos 12 municípios estão na fronteira.</p>
+  <details class="conta"><summary>Veja a conta: o contraste Niterói × Miracema</summary><div class="body">
+    <p><b>IDEB por mil reais gastos por aluno</b><span class="f formula">Niterói:  5,9 ÷ 15,8 = 0,373</span><span class="f formula">Miracema: 7,9 ÷ 10,5 = 0,752</span></p>
+    <p>Niterói gasta 50,5% a mais e entrega um IDEB 25,3% menor. Miracema converte cada real em aprendizagem com o dobro (2,01×) do rendimento. Essa comparação não depende do DEA: é uma divisão simples.</p>
+    <p><b>O que θ = 0,9683 significa</b><span class="f formula">φ = 1/θ = 1/0,9683 = 1,033</span>Com os mesmos insumos, Niterói poderia elevar seus dois IDEBs em cerca de 3,3% até alcançar a fronteira formada pelos municípios de referência.</p>
+    <p class="ex">Os 12 escores foram recalculados de forma independente, resolvendo um problema de programação linear para cada município. Todos batem com o publicado até a quarta casa decimal.</p>
+  </div></details>
+</section>
+
+<section id="alocacao">
+  <h2>Comparação de regras de alocação <span class="badge sint">instância sintética</span></h2>
+  <p class="small">Três estratégias aplicadas à mesma instância de 50 municípios e 10 metas, com resultados expressos na escala das 73 metas do PNE.</p>
+  <div class="card rank strat">
+    <div class="rk"><div class="lbl"><span>(a) Proporcional às matrículas (regra atual)</span><b>64%</b></div><div class="track"><div class="fill a" style="width:64%"></div></div><p class="legend" style="margin-top:4px">47/73 metas · gasto 9,8% do PIB · robustez 42% · equidade baixa</p></div>
+    <div class="rk"><div class="lbl"><span>(b) Programação por metas sem DEA</span><b>79%</b></div><div class="track"><div class="fill b" style="width:79%"></div></div><p class="legend" style="margin-top:4px">58/73 metas · gasto 9,5% do PIB · robustez 61% · equidade média</p></div>
+    <div class="rk"><div class="lbl"><span><b>(c) SGP + DEA + restrição de risco (proposto)</b></span><b>93%</b></div><div class="track"><div class="fill c" style="width:93%"></div></div><p class="legend" style="margin-top:4px">68/73 metas · gasto 9,1% do PIB · robustez 84% · equidade alta</p></div>
+  </div>
+  <div class="kpis" style="margin-top:12px">
+    <div class="kpi"><b>93%</b><span>das metas, contra 64% da regra por matrícula</span></div>
+    <div class="kpi"><b>−0,7 p.p.</b><span>do PIB em gasto acumulado</span></div>
+    <div class="kpi"><b>~R$ 52 bi</b><span>economia estimada em 10 anos (valores de 2024)</span></div>
+  </div>
+</section>
+
+<section id="robustez">
+  <h2>Robustez: Monte Carlo <span class="badge sint">instância sintética</span></h2>
+  <div class="card small">
+    <p>O plano do módulo 3 foi submetido a <b>10.000 cenários</b> com três fontes de incerteza: trajetória do PIB (modelo AR(1) ajustado a 1995-2024), custo por aluno (lognormal, variação de 15%) e choques externos (Poisson, 0,08 por ano).</p>
+    <p><b>Critério de aprovação:</b> em pelo menos 80% dos cenários, cumprir 85% ou mais das 73 metas até 2035.</p>
+    <ul style="margin:0;padding-left:18px">
+      <li>Média de metas atingidas: <b>91,3%</b> (IC 95%: 87,4% a 94,8%).</li>
+      <li>Só <b>3,2%</b> dos cenários ficam abaixo de 75% das metas, e isso ocorre apenas com dois anos seguidos de PIB negativo.</li>
+      <li>O parâmetro mais influente é a penalização por ineficiência <b>γ</b> (elasticidade de 0,38): condicionar o repasse à gestão eficiente move mais o plano do que aumentar o repasse.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="glossario">
+  <h2>Glossário: todos os termos</h2>
+  <input class="search" id="q" type="search" placeholder="Buscar termo (ex.: DEA, CVaR, IDEB)" aria-label="Buscar termo">
+  <div id="gl">
+
+  <div class="cat">Política educacional e dados</div>
+  <details><summary>PNE 2026-2036</summary><div class="body">Plano Nacional de Educação aprovado pela Lei nº 15.388/2026. Fixa 73 metas para dez anos, da erradicação do analfabetismo à universalização do ensino médio, e uma trajetória de financiamento de 5,5% para 10% do PIB.</div></details>
+  <details><summary>FUNDEB</summary><div class="body">Fundo de Manutenção e Desenvolvimento da Educação Básica. Principal mecanismo de redistribuição de recursos da educação entre estados e municípios, baseado sobretudo no número de matrículas.</div></details>
+  <details><summary>Critério demográfico</summary><div class="body">Distribuir o recurso pela quantidade de alunos. É simples e previsível, mas não considera se o município transforma o recurso em aprendizagem.</div></details>
+  <details><summary>IDEB (anos iniciais e finais)</summary><div class="body">Índice de Desenvolvimento da Educação Básica, do INEP. Combina aprovação escolar e desempenho em avaliação, numa escala de 0 a 10. AI = 1º ao 5º ano; AF = 6º ao 9º ano.</div></details>
+  <details><summary>IDHM</summary><div class="body">Índice de Desenvolvimento Humano Municipal (renda, educação e longevidade). No modelo, municípios abaixo da mediana recebem um piso de equidade maior.</div></details>
+  <details><summary>INEP · Censo Escolar</summary><div class="body">Instituto Nacional de Estudos e Pesquisas Educacionais. O Censo Escolar levanta anualmente matrículas, docentes e infraestrutura de cada escola. O modelo usa 47 variáveis por município.</div></details>
+  <details><summary>SIOPE / FNDE</summary><div class="body">Sistema de Informações sobre Orçamentos Públicos em Educação. Registra quanto cada município gasta com educação e serve para estimar o custo por aluno.</div></details>
+  <details><summary>PNAD Contínua</summary><div class="body">Pesquisa domiciliar do IBGE. Fornece taxas de analfabetismo e de distorção idade-série por estado.</div></details>
+  <details><summary>Distorção idade-série</summary><div class="body">Percentual de alunos com dois ou mais anos de atraso em relação à série esperada para a idade.</div></details>
+
+  <div class="cat">AHP · ponderação das metas</div>
+  <details><summary>AHP — Analytic Hierarchy Process</summary><div class="body">Método de Saaty (1980) que transforma comparações par a par feitas por especialistas em pesos numéricos, e verifica se os julgamentos são coerentes entre si.</div></details>
+  <details><summary>Matriz de comparação par a par</summary><div class="body">Tabela em que cada célula diz quantas vezes um item é mais importante que outro. Se A vale 3 vezes B, a célula inversa vale 1/3.</div></details>
+  <details><summary>Escala de Saaty (1 a 9)</summary><div class="body">1 = igual importância · 3 = moderada · 5 = forte · 7 = muito forte · 9 = extrema. Os pares 2, 4, 6 e 8 ficam entre esses níveis.</div></details>
+  <details><summary>Autovetor e λmax</summary><div class="body">O vetor de pesos é o autovetor principal da matriz: <span class="f formula">A · w = λmax · w</span> λmax é o maior autovalor. Quanto mais perto de n (número de itens), mais coerentes são os julgamentos.</div></details>
+  <details><summary>Índice e Razão de Consistência (CI, RI, CR)</summary><div class="body"><span class="f formula">CI = (λmax − n)/(n − 1)    CR = CI/RI</span> RI é o índice aleatório tabelado. Aceita-se CR &lt; 0,10. O painel do artigo teve CR = 0,07.</div></details>
+  <details><summary>AHP em dois níveis</summary><div class="body">Comparar 73 metas diretamente exigiria 73×72/2 = 2.628 comparações. Por isso a hierarquia: primeiro os 6 eixos entre si (15 comparações), depois as metas dentro de cada eixo.</div></details>
+  <details><summary>Eixos do PNE</summary><div class="body">Os seis grupos usados no AHP: Alfabetização, Educação Básica, Equidade, Educação Integral, Formação Docente e Gestão. Os mais pesados: Alfabetização e Literacia (0,22) e Educação Básica Universal (0,20).</div></details>
+  <details><summary>Painel de especialistas</summary><div class="body">12 especialistas (MEC, INEP, Consed e Undime) que emitiram os julgamentos do AHP. Mudar o painel muda os pesos, e isso está declarado como limitação.</div></details>
+
+  <div class="cat">DEA · eficiência dos municípios</div>
+  <details><summary>DEA — Análise Envoltória de Dados</summary><div class="body">Método de programação linear que mede a eficiência <b>relativa</b> de unidades que usam vários insumos para gerar vários produtos, sem precisar de preços nem de uma função de produção conhecida.</div></details>
+  <details><summary>DMU</summary><div class="body"><i>Decision Making Unit</i>: cada unidade avaliada. Aqui, cada município.</div></details>
+  <details><summary>Insumos e produtos</summary><div class="body">Insumos são o que a DMU usa (gasto por aluno, alunos por docente). Produtos são o que ela entrega (IDEB AI e AF). O modelo nacional também considera formação dos professores e taxas de conclusão.</div></details>
+  <details><summary>Fronteira de eficiência</summary><div class="body">Conjunto das DMUs que nenhuma combinação das outras supera. Quem está nela tem θ = 1 e serve de referência (<i>benchmark</i>) para as demais.</div></details>
+  <details><summary>CCR × BCC</summary><div class="body">CCR (Charnes, Cooper e Rhodes, 1978) supõe retornos constantes de escala. BCC (Banker, Charnes e Cooper, 1984) admite retornos variáveis, o que é mais justo ao comparar municípios de 3 mil e de 6 milhões de habitantes.</div></details>
+  <details><summary>Retornos variáveis de escala</summary><div class="body">Dobrar os insumos não necessariamente dobra os produtos. No BCC isso entra pela restrição Σλ = 1, que compara cada município com combinações de outros de porte parecido.</div></details>
+  <details><summary>Orientação a output</summary><div class="body">Pergunta quanto a DMU poderia <b>aumentar</b> seus produtos mantendo os insumos. É a orientação natural para educação, em que o objetivo é melhorar o aprendizado, não cortar gasto.</div></details>
+  <details><summary>θ (escore de eficiência) e φ</summary><div class="body">φ é quanto os produtos poderiam crescer. O escore é θ = 1/φ, entre 0 e 1.<p class="ex">Niterói: θ = 0,9683, ou seja, φ = 1,033: poderia ter cerca de 3,3% mais IDEB com os mesmos insumos.</p></div></details>
+  <details><summary>Folgas (slacks) e ε</summary><div class="body">Folgas são excessos de insumo ou faltas de produto que sobram mesmo depois do ajuste radial. ε é um número muito pequeno que dá prioridade ao ajuste principal na função objetivo.</div></details>
+  <details><summary>Poder de discriminação</summary><div class="body">Capacidade do DEA de separar eficientes de ineficientes. Pela regra prática, é preciso ter pelo menos 3 × (insumos + produtos) DMUs: 3 × 4 = 12. O piloto tem exatamente 12, por isso metade da amostra sai na fronteira. Com 5.570 municípios, o problema desaparece.</div></details>
+
+  <div class="cat">Programação por Metas Estocástica</div>
+  <details><summary>Programação por Metas (Goal Programming)</summary><div class="body">Técnica de Charnes e Cooper (1961) para vários objetivos em conflito. Em vez de maximizar um único objetivo, minimiza o quanto o plano fica longe de cada meta.</div></details>
+  <details><summary>SGP — Programação por Metas Estocástica</summary><div class="body">Versão em que alguns parâmetros, como o orçamento, são aleatórios, com distribuição de probabilidade, e não números fixos. Adequada porque o orçamento do PNE depende do PIB.</div></details>
+  <details><summary>Desvios d⁻ e d⁺</summary><div class="body">Quanto o plano fica abaixo (d⁻) ou acima (d⁺) de cada meta. A função objetivo é <span class="f formula">Min Z = Σ wᵢ · (dᵢ⁻ + dᵢ⁺)</span> com os pesos wᵢ vindos do AHP.</div></details>
+  <details><summary>Variável de decisão xᵢⱼₜ</summary><div class="body">Recurso destinado à meta i, no município j, no ano t. São 5.570 municípios × 73 metas × 10 anos.</div></details>
+  <details><summary>Custo ajustado pela eficiência (γ)</summary><div class="body"><span class="f formula">c′ = c / θ^γ</span> Quanto menor a eficiência θ, mais caro fica cada resultado no município. γ, entre 0 e 1, regula a força dessa penalização. É o parâmetro mais influente do modelo (elasticidade de 0,38).</div></details>
+  <details><summary>Orçamento aleatório α(ω)</summary><div class="body">Fração do PIB destinada à educação, sorteada entre 5,5% e 10% numa distribuição triangular com moda de 7,5%.</div></details>
+  <details><summary>Distribuição triangular</summary><div class="body">Distribuição definida por mínimo, mais provável e máximo. É útil quando só se conhecem esses três valores.</div></details>
+  <details><summary>Restrição de risco orçamentário (CVaR, β = 0,95)</summary><div class="body">Garante que o plano caiba no orçamento mesmo em 95% dos cenários desfavoráveis de PIB. CVaR (<i>Conditional Value at Risk</i>) é a perda média nos piores casos, além do limite de 95%.</div></details>
+  <details><summary>Restrição de equidade (δ)</summary><div class="body">Piso mínimo de recursos por região. Municípios com IDHM abaixo da mediana recebem fator δ ≥ 1,2.</div></details>
+  <details><summary>Programação Dinâmica e princípio de Bellman</summary><div class="body">Decisões em sequência no tempo: o melhor plano para os anos seguintes depende do estado alcançado agora. Aqui o princípio aparece na ordem das metas ao longo dos 10 anos, porque alfabetizar cedo é pré-requisito para as metas seguintes.</div></details>
+  <details><summary>Intertemporalidade</summary><div class="body">Reconhecer que decisões de um ano afetam os anos seguintes. Está no índice t = 1…10 da variável de decisão.</div></details>
+
+  <div class="cat">Monte Carlo e robustez</div>
+  <details><summary>Simulação de Monte Carlo</summary><div class="body">Repetir o cálculo milhares de vezes sorteando os valores incertos, para ver a distribuição dos resultados possíveis e não só um número.</div></details>
+  <details><summary>Iteração / cenário</summary><div class="body">Cada uma das 10.000 rodadas, com um sorteio diferente de PIB, custos e choques.</div></details>
+  <details><summary>AR(1)</summary><div class="body">Modelo autorregressivo de ordem 1: o valor de um ano depende do valor do ano anterior mais um choque aleatório. Usado para gerar trajetórias de PIB a partir da série 1995-2024.</div></details>
+  <details><summary>Distribuição lognormal · CV</summary><div class="body">A lognormal só gera valores positivos, com cauda longa à direita, e é adequada para custos. CV (coeficiente de variação) é o desvio-padrão dividido pela média: aqui, 15%.</div></details>
+  <details><summary>Choques de Poisson</summary><div class="body">Eventos raros e independentes, como crises fiscais, sorteados com taxa de 0,08 por ano (cerca de um a cada 12 anos).</div></details>
+  <details><summary>Critério de robustez</summary><div class="body"><span class="f formula">P(metas cumpridas ≥ 85%) ≥ 0,80</span> Em pelo menos 80% dos cenários, o plano precisa cumprir 85% ou mais das metas. O framework obteve 84%.</div></details>
+  <details><summary>Intervalo de confiança de 95%</summary><div class="body">Faixa de valores em que se espera estar o resultado com 95% de confiança. Aqui, 87,4% a 94,8% de metas cumpridas. A largura reflete a incerteza dos cenários de PIB.</div></details>
+  <details><summary>Elasticidade</summary><div class="body">Variação percentual do resultado para cada 1% de variação num parâmetro. Elasticidade 0,38 para γ indica que ele é o fator que mais move o desempenho do plano.</div></details>
+  <details><summary>Análise de sensibilidade</summary><div class="body">Variar um parâmetro de cada vez para ver quanto o resultado muda. Mostra em que vale a pena caprichar na calibração.</div></details>
+
+  <div class="cat">Implementação e metodologia</div>
+  <details><summary>Instância sintética</summary><div class="body">Conjunto de dados construído para testar o modelo (50 municípios, 10 metas), não extraído de um caso real. Serve para isolar o efeito da regra de alocação.</div></details>
+  <details><summary>Baseline</summary><div class="body">Cenário de comparação: a regra atual, proporcional às matrículas.</div></details>
+  <details><summary>Ponto percentual (p.p.)</summary><div class="body">Diferença direta entre duas porcentagens. De 9,8% para 9,1% do PIB são 0,7 p.p.</div></details>
+  <details><summary>Python, PuLP, CVXPY, PyDEA e Gurobi</summary><div class="body">Ferramentas usadas: Python 3.11 como linguagem; PuLP e CVXPY para escrever os modelos de otimização; PyDEA para o DEA; Gurobi (licença acadêmica) como solver. A instância completa leva cerca de 4,2 horas num servidor de 32 núcleos.</div></details>
+  <details><summary>Framework integrado</summary><div class="body">Sequência fixa de métodos em que a saída de um alimenta o próximo: AHP → DEA → SGP → Monte Carlo. Nenhum dos quatro, sozinho, cobre prioridade, eficiência, incerteza e robustez.</div></details>
+  <p id="semres" class="muted small hidden">Nenhum termo encontrado.</p>
+  </div>
+</section>
+
+<section id="referencial">
+  <h2>Referencial teórico e metodológico</h2>
+  <div class="card pillar">
+    <h3>Pilar 1 · Eficiência do gasto público em educação</h3>
+    <p class="small">Soares et al. (2022) mostram grande disparidade de eficiência entre municípios brasileiros: há municípios na fronteira que gastam menos que a média convivendo com outros que gastam o dobro e entregam menos. Rosano-Peña et al. (2012) acompanham a dinâmica dessa eficiência ao longo do tempo. A conclusão comum é que aumentar o repasse não garante ganho proporcional de aprendizagem.</p>
+  </div>
+  <div class="card pillar">
+    <h3>Pilar 2 · Análise Envoltória de Dados</h3>
+    <p class="small">Modelo CCR (Charnes, Cooper e Rhodes, 1978) e sua extensão com retornos variáveis, o BCC (Banker, Charnes e Cooper, 1984). Lins e Meza (2000) tratam da integração do DEA ao apoio à decisão. Senra et al. (2007) discutem a seleção de variáveis, e Sadjadi et al. (2011) a supereficiência robusta.</p>
+  </div>
+  <div class="card pillar">
+    <h3>Pilar 3 · Decisão com múltiplos objetivos e no tempo</h3>
+    <p class="small">AHP de Saaty (1980) para ponderar metas em conflito. Programação por Metas de Charnes e Cooper (1961) e sua extensão estocástica (Aouni e Kettani, 2001) para alocar sob incerteza orçamentária. Princípio da otimalidade de Bellman (1957) para a lógica entre os anos. Farahani e Asgari (2007) para a combinação de multicritério e localização.</p>
+  </div>
+  <div class="card pillar">
+    <h3>Desenho da pesquisa</h3>
+    <p class="small">Modelagem quantitativa prescritiva em quatro módulos sequenciais. Ela foi testada em duas frentes: (i) um piloto com dados reais de 12 municípios fluminenses (INEP, SIOPE, Censo Escolar) para o diagnóstico de eficiência; (ii) uma instância sintética representativa para comparar as regras de alocação e testar a robustez por Monte Carlo.</p>
+  </div>
+  <h3>Referências</h3>
+  <ol class="refs">
+    <li>AOUNI, B.; KETTANI, O. Goal programming model: a glorious history and a promising future. <i>European Journal of Operational Research</i>, v. 133, n. 2, 2001.</li>
+    <li>BANKER, R. D.; CHARNES, A.; COOPER, W. W. Some models for estimating technical and scale inefficiencies in DEA. <i>Management Science</i>, v. 30, n. 9, 1984.</li>
+    <li>BELLMAN, R. <i>Dynamic Programming</i>. Princeton University Press, 1957.</li>
+    <li>BRASIL. Lei nº 15.388, de 10 de março de 2026. Aprova o Plano Nacional de Educação 2026–2036.</li>
+    <li>CHARNES, A.; COOPER, W. W. <i>Management Models and Industrial Applications of Linear Programming</i>. Wiley, 1961.</li>
+    <li>CHARNES, A.; COOPER, W. W.; RHODES, E. Measuring the efficiency of decision making units. <i>European Journal of Operational Research</i>, v. 2, n. 6, 1978.</li>
+    <li>FARAHANI, R. Z.; ASGARI, N. Combination of MCDM and covering techniques in a hierarchical model for facility location. <i>European Journal of Operational Research</i>, v. 176, n. 3, 2007.</li>
+    <li>IBGE. <i>PNAD Contínua 2024</i>; <i>Sistema de Contas Nacionais 1995–2024</i>. 2025.</li>
+    <li>INEP. <i>Censo Escolar 2024</i>; <i>Resultados do IDEB 2023</i>.</li>
+    <li>LINS, M. P. E.; MEZA, L. A. <i>Análise Envoltória de Dados e Perspectivas de Integração no Ambiente de Apoio à Decisão</i>. COPPE/UFRJ, 2000.</li>
+    <li>ROSANO-PEÑA, C.; ALBUQUERQUE, P. H. M.; DAHER, C. E. Dinâmica da eficiência dos gastos públicos em educação nos municípios brasileiros. <i>Revista Brasileira de Economia</i>, v. 66, n. 4, 2012.</li>
+    <li>ROSANO-PEÑA, C. et al. A eficiência dos gastos públicos em educação: evidências georreferenciadas nos municípios goianos. <i>Economia Aplicada</i>, v. 16, n. 3, 2012.</li>
+    <li>SAATY, T. L. <i>The Analytic Hierarchy Process</i>. McGraw-Hill, 1980.</li>
+    <li>SADJADI, S. J. et al. A robust super-efficiency DEA model. <i>Applied Mathematics and Computation</i>, v. 217, 2011.</li>
+    <li>SENRA, L. F. A. C. et al. Estudo sobre métodos de seleção de variáveis em DEA. <i>Pesquisa Operacional</i>, v. 27, n. 2, 2007.</li>
+    <li>SIOPE/FNDE. Dados municipais de 2023. 2024.</li>
+    <li>SOARES, J. F. et al. Eficiência municipal em educação: uma análise DEA com dados do Censo Escolar. <i>Revista Brasileira de Estudos Pedagógicos</i>, v. 103, n. 265, 2022.</li>
+    <li>TODOS PELA EDUCAÇÃO. <i>Anuário Brasileiro da Educação Básica 2024</i>. Moderna, 2024.</li>
+  </ol>
+</section>
+
+<section id="perguntas">
+  <h2>Perguntas frequentes</h2>
+  <details><summary>O que está errado em distribuir por matrícula?</summary><div class="body">Nada no sentido legal, mas é um rateio, não uma alocação. O critério não enxerga se o município transforma o recurso em aprendizagem, de onde ele parte (desigualdade regional) nem a ordem entre metas, em que alfabetizar cedo é pré-requisito do resto.</div></details>
+  <details><summary>Quais resultados vêm de dados reais?</summary><div class="body">O diagnóstico de eficiência (DEA) dos 12 municípios fluminenses, com dados do INEP e do SIOPE. Os 93% de metas, a robustez de 84% e a economia estimada vêm da instância sintética de 50 municípios e 10 metas.</div></details>
+  <details><summary>Por que Japeri, com IDEB 4,3, está na fronteira?</summary><div class="body">O DEA mede eficiência relativa. Com só 12 municípios e 4 variáveis, nenhuma combinação dos outros produz mais IDEB com menos insumo que Japeri, que tem gasto baixo. Isso é efeito do tamanho da amostra, que está no limite mínimo, e não um atestado de boa gestão. No modelo nacional, com 5.570 municípios, essa distorção desaparece.</div></details>
+  <details><summary>Então Niterói gasta mal?</summary><div class="body">Gasta mais e entrega menos que vários municípios de referência: R$ 15,8 mil por aluno para IDEB 5,9, contra R$ 10,5 mil e 7,9 em Miracema. Isso não é prova de má gestão. Contexto socioeconômico, porte e outros fatores também pesam. O que o dado derruba é a ideia de que mais repasse gera, sozinho, mais aprendizagem.</div></details>
+  <details><summary>AHP com 73 metas é viável?</summary><div class="body">Comparando todas aos pares, não: seriam 2.628 comparações. Por isso o AHP é feito em dois níveis: 6 eixos entre si e depois as metas dentro de cada eixo.</div></details>
+  <details><summary>Quem definiu os pesos das metas?</summary><div class="body">Um painel de 12 especialistas do MEC, do INEP, do Consed e da Undime, com razão de consistência de 0,07 (abaixo do limite de 0,10). Os pesos dependem desse painel, e isso é uma das limitações declaradas.</div></details>
+  <details><summary>Por que usar programação estocástica e não determinística?</summary><div class="body">Porque o orçamento do PNE depende do PIB, que é incerto. O modelo determinístico (estratégia b) atinge 79% das metas com robustez de 61%. O estocástico com DEA atinge 93% com robustez de 84%.</div></details>
+  <details><summary>O que significa “penalizar” município ineficiente?</summary><div class="body">No cálculo, cada resultado custa mais onde a eficiência é menor (c′ = c/θ^γ). Na prática, o modelo tende a direcionar recursos para onde eles rendem mais, ou a condicioná-los a melhorias de gestão. A restrição de equidade impede que os municípios mais pobres fiquem sem recursos.</div></details>
+  <details><summary>De onde vem a economia de R$ 52 bilhões?</summary><div class="body">É uma estimativa feita a partir da diferença de 0,7 p.p. do PIB entre a regra atual e o framework, obtida na instância sintética. É uma ordem de grandeza para discussão, não uma previsão orçamentária.</div></details>
+  <details><summary>Dá para aplicar no meu município ou estado?</summary><div class="body">O diagnóstico DEA, sim, com dados públicos: gasto por aluno (SIOPE), alunos por docente (Censo Escolar) e IDEB (INEP). A alocação completa exige definir as metas locais, seus pesos e os custos unitários.</div></details>
+  <details><summary>Quais são as limitações e os próximos passos?</summary><div class="body">Limitações: a alocação foi testada em instância sintética; o piloto DEA está no limite de discriminação; os pesos dependem do painel; a qualidade dos dados do SIOPE varia entre municípios; e a instância completa é pesada (cerca de 4,2 horas). Próximo passo: aprendizado por reforço para atualizar a alocação à medida que chegam novos dados de monitoramento do PNE.</div></details>
+</section>
+
+<footer>
+  XLVI ENEGEP · São Paulo, 20 a 23 de outubro de 2026 · Trabalho 52666<br>
+  Cristiane Cruz de Oliveira · Geovane Virmecati · José Bezerra da Silva Filho
+</footer>
+</main>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), box=document.getElementById('gl'), none=document.getElementById('semres');
+  var norm=function(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();};
+  q.addEventListener('input',function(){
+    var t=norm(q.value.trim()), any=false;
+    box.querySelectorAll('details').forEach(function(d){
+      var hit=!t||norm(d.textContent).indexOf(t)>-1;
+      d.classList.toggle('hidden',!hit); if(hit) any=true;
+      d.open=!!t&&hit&&norm(d.querySelector('summary').textContent).indexOf(t)>-1;
+    });
+    box.querySelectorAll('.cat').forEach(function(c){
+      var n=c.nextElementSibling, show=false;
+      while(n&&n.tagName==='DETAILS'){ if(!n.classList.contains('hidden')) show=true; n=n.nextElementSibling; }
+      c.classList.toggle('hidden',!show);
+    });
+    none.classList.toggle('hidden',any);
+  });
+})();
+</script>
+</body>
+</html>
