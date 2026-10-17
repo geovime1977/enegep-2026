@@ -162,6 +162,7 @@ td.fr{color:var(--ok);font-weight:700}
     <a href="#resumo">Resumo</a>
     <a href="#metodo">Método</a>
     <a href="#piloto">Piloto real</a>
+    <a href="#calculos">Cálculos</a>
     <a href="#alocacao">Alocação</a>
     <a href="#robustez">Robustez</a>
     <a href="#glossario">Glossário</a>
@@ -268,10 +269,14 @@ td.fr{color:var(--ok);font-weight:700}
     </table>
   </div>
   <p class="small" style="margin-top:10px">Fontes: IDEB/INEP 2023, SIOPE/FNDE 2023, Censo Escolar INEP 2024 e Anuário Brasileiro da Educação Básica 2024. Média de eficiência do piloto: θ = 0,971. Seis dos 12 municípios estão na fronteira.</p>
-  <details class="conta"><summary>Veja a conta: o contraste Niterói × Miracema</summary><div class="body">
+  <details class="conta" id="calculos" open><summary>Os cálculos: contraste, DEA, AHP e custo ajustado</summary><div class="body">
     <p><b>IDEB por mil reais gastos por aluno</b><span class="f formula">Niterói:  5,9 ÷ 15,8 = 0,373</span><span class="f formula">Miracema: 7,9 ÷ 10,5 = 0,752</span></p>
     <p>Niterói gasta 50,5% a mais e entrega um IDEB 25,3% menor. Miracema converte cada real em aprendizagem com o dobro (2,01×) do rendimento. Essa comparação não depende do DEA: é uma divisão simples.</p>
     <p><b>O que θ = 0,9683 significa</b><span class="f formula">φ = 1/θ = 1/0,9683 = 1,033</span>Com os mesmos insumos, Niterói poderia elevar seus dois IDEBs em cerca de 3,3% até alcançar a fronteira formada pelos municípios de referência.</p>
+    <p><b>O modelo DEA resolvido para cada município j</b><span class="f formula">max φ</span><span class="f formula">s.a.  Σ λₖ · insumoₖ ≤ insumoⱼ   (gasto/aluno, alunos/docente)</span><span class="f formula">      Σ λₖ · produtoₖ ≥ φ · produtoⱼ   (IDEB AI, IDEB AF)</span><span class="f formula">      Σ λₖ = 1   (retornos variáveis, BCC)    λₖ ≥ 0</span>São 12 problemas de programação linear, um por município. O escore publicado é θ = 1/φ.</p>
+    <p><b>Por que metade sai na fronteira</b><span class="f formula">mínimo de DMUs = 3 × (insumos + produtos) = 3 × (2 + 2) = 12</span>O piloto tem 12 municípios: está exatamente no limite, e por isso o DEA discrimina pouco.</p>
+    <p><b>Quantas comparações o AHP exige</b><span class="f formula">73 metas direto: 73 × 72 / 2 = 2.628 comparações</span><span class="f formula">6 eixos entre si: 6 × 5 / 2 = 15 comparações</span>Por isso o AHP foi feito em dois níveis.</p>
+    <p><b>Custo ajustado pela eficiência</b><span class="f formula">c′ = c / θ^γ   →   Cambuci, θ = 0,88, γ = 1:  c′ = c / 0,88 = 1,136 · c</span>Cada resultado em Cambuci “custa” 13,6% a mais no modelo do que num município da fronteira.</p>
     <p class="ex">Os 12 escores foram recalculados de forma independente, resolvendo um problema de programação linear para cada município. Todos batem com o publicado até a quarta casa decimal.</p>
   </div></details>
 </section>
