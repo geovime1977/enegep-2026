@@ -321,7 +321,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);text-align:center}
       </tbody>
     </table></div>
     <p><b>Passo 3 · Normalização da soma de cada linha</b><span class="f formula">v = (soma − mín) / (máx − mín) = (soma + 6) / 12</span><span class="f formula">A4 = 1,000 · A1 = 0,667 · A2 = 0,333 · A3 = 0 → 0,01</span>O menor valor vira 0,01 para nenhuma alternativa ficar com peso zero.</p>
-    <p><b>Passo 4 · Agregação.</b> O escore de cada alternativa é a soma, em todos os critérios, de (peso do critério × valor normalizado), somada entre os três decisores:<span class="f formula">Escore(Aᵢ) = Σ decisores Σ critérios  pesoₖ × vᵢₖ</span>O artigo apresenta o resultado final numa escala até 10: A1 8,14 · A4 7,62 · A2 7,38 · A3 6,21.</p>
+    <p><b>Passo 4 · Agregação.</b> O escore de cada alternativa é a soma, em todos os critérios, de (peso do critério × valor normalizado), somada entre os três decisores:<span class="f formula">Escore(Aᵢ) = Σ decisores Σ critérios  pesoₖ × vᵢₖ</span>Escores finais publicados no artigo: A1 8,14 · A4 7,62 · A2 7,38 · A3 6,21.</p>
     <p class="note">Os julgamentos individuais dos três decisores não estão publicados no artigo. A tabela acima ilustra o procedimento e não reproduz os escores finais.</p>
   </div></details>
 
@@ -338,7 +338,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);text-align:center}
       </tbody>
     </table></div>
     <p><b>Correlação de Spearman</b><span class="f formula">ρ = 1 − 6·Σd² / [n(n² − 1)] = 1 − 6·0 / [4 × 15] = 1,00</span></p>
-    <p><b>Quanto isso prova?</b><span class="f formula">ordens possíveis com 4 alternativas = 4! = 24  →  acaso = 1/24 ≈ 4,2%</span>A concordância total tem baixa chance de ser acaso, mas os dois métodos partiram dos mesmos julgamentos do comitê. É indício de consistência, não validação independente.</p>
+    <p><b>Quanto isso prova?</b><span class="f formula">ordens possíveis com 4 alternativas = 4! = 24  →  acaso = 1/24 ≈ 4,2%</span>A concordância total tem baixa chance de ser acaso, mas quatro alternativas é uma amostra pequena. É indício de consistência, não validação independente.</p>
   </div></details>
 
   <details class="conta" open><summary>4 · Simulação: variações e metas do CFM</summary><div class="body">
@@ -369,7 +369,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);text-align:center}
         <tr><td>A4</td><td>8,4</td><td>16,1</td><td>0,522</td><td>6,1 anos</td><td>5/6</td></tr>
       </tbody>
     </table></div>
-    <p><span class="f formula">A1: 4,2 ÷ 19,7 = 0,213   A2: 2,8 ÷ 8,3 = 0,337</span>A2 é a mais barata e a de payback mais curto, mas cumpre só 3 das 6 metas. Entre as alternativas que resolvem o problema, A1 tem o menor custo por minuto.</p>
+    <p><span class="f formula">A1: 4,2 ÷ 19,7 = 0,213   A2: 2,8 ÷ 8,3 = 0,337</span>A2 é a mais barata e a de payback mais curto, mas cumpre só 3 das 6 metas. A1 tem o menor custo por minuto entre as quatro alternativas e é a única que cumpre as 6 metas.</p>
   </div></details>
 </section>
 
@@ -412,7 +412,7 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);text-align:center}
   <details><summary>AHP — Analytic Hierarchy Process</summary><div class="body">Método de Saaty que compara critérios e alternativas aos pares numa escala de 1 a 9 (“quantas vezes mais importante”). Gera um vetor de prioridades que soma 1. Aqui foi usado como verificação cruzada do SAPEVO-M.</div></details>
   <details><summary>Vetor de prioridades</summary><div class="body">Saída do AHP: um escore por alternativa, normalizado para somar 1.<p class="ex">A1 0,382 · A4 0,298 · A2 0,214 · A3 0,106.</p></div></details>
   <details><summary>ρ de Spearman</summary><div class="body">Correlação entre duas ordenações, de −1 (opostas) a +1 (idênticas): <span class="f formula">ρ = 1 − 6·Σd² / [n(n² − 1)]</span> em que d é a diferença de posição. Aqui deu 1,00: SAPEVO-M e AHP colocaram as quatro alternativas na mesma ordem.</div></details>
-  <details><summary>Convergência entre métodos</summary><div class="body">Quando métodos diferentes chegam ao mesmo ranking. É um indício de consistência. Neste trabalho os dois métodos usaram os mesmos julgamentos de entrada, então a convergência não equivale a uma validação independente.</div></details>
+  <details><summary>Convergência entre métodos</summary><div class="body">Quando métodos diferentes chegam ao mesmo ranking. É um indício de consistência, mas não equivale a uma validação independente: com poucas alternativas, a concordância por acaso não é desprezível.</div></details>
 
   <div class="cat">Simulação</div>
   <details><summary>Simulação de Eventos Discretos (SED)</summary><div class="body">Modelo de computador que reproduz o sistema evento a evento (chegada, início e fim de atendimento), sorteando tempos aleatórios. Ao contrário das fórmulas de fila, capta picos, prioridades e interdependências entre etapas.</div></details>
@@ -490,12 +490,12 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);text-align:center}
   <details><summary>O que acontece se a utilização passar de 1?</summary><div class="body">A demanda passa a ser maior que a capacidade e a fila cresce sem parar ao longo do turno. Com 0,844, um aumento de cerca de 18% na demanda de exames já leva a etapa a esse limite.</div></details>
   <details><summary>Por que usar três métodos e não um só?</summary><div class="body">Cada um responde a uma pergunta diferente. Filas mostram onde está o problema. O SAPEVO-M escolhe o que fazer considerando custo, prazo, risco e satisfação. A simulação testa se a escolha resiste ao pico real. Um método só deixaria uma dessas perguntas sem resposta.</div></details>
   <details><summary>Por que SAPEVO-M e não apenas AHP?</summary><div class="body">Com decisores de formações diferentes (médico, enfermagem e administração), perguntar “quantas vezes o critério A é mais importante que B” gera números que ninguém sustenta. Pedir só a ordem é mais simples e mais confiável. O AHP entrou como verificação.</div></details>
-  <details><summary>Spearman = 1 prova que a escolha é robusta?</summary><div class="body">Não sozinho. Com 4 alternativas, a chance de concordância total por acaso é de 1 em 24 (cerca de 4%), e os dois métodos partiram dos mesmos julgamentos. É indício de consistência, não prova independente. A validação mais forte vem da simulação.</div></details>
+  <details><summary>Spearman = 1 prova que a escolha é robusta?</summary><div class="body">Não sozinho. Com 4 alternativas, a chance de concordância total por acaso é de 1 em 24 (cerca de 4%). É indício de consistência, não prova independente. A validação mais forte vem da simulação.</div></details>
   <details><summary>Por que a simulação mostra esperas maiores que o modelo de filas?</summary><div class="body">O modelo de filas usa a média do dia. A simulação inclui o pico das 18h às 22h (demanda 2,4 vezes maior). A diferença é justamente o custo do pico, que só a simulação revela.</div></details>
   <details><summary>Os dados são de um hospital real?</summary><div class="body">Não. São parâmetros sintéticos calibrados por fontes oficiais (CFM e Ministério da Saúde). Usar dados de prontuário exige comitê de ética e convênio institucional. Esta etapa valida o método, e a aplicação com série histórica real é o próximo passo.</div></details>
   <details><summary>Dá para aplicar no meu hospital? Que dados são necessários?</summary><div class="body">Sim. Para cada etapa do fluxo bastam três números: chegadas por hora (λ), atendimentos por hora de cada profissional ou equipamento (μ) e quantos trabalham em paralelo (c). Para a priorização, a lista de alternativas e um comitê que ordene critérios e opções. Para a simulação, a curva de chegadas ao longo do dia.</div></details>
-  <details><summary>Por que A1 e não A2, que é mais barata?</summary><div class="body">A2 custa R$ 2,8 mi, mas atende só 3 das 6 metas do CFM. Entre as alternativas que atendem todas, A1 tem o menor custo por minuto de espera reduzido (R$ 0,213 mi) e o menor payback (2,8 anos).</div></details>
-  <details><summary>Quais são as limitações?</summary><div class="body">Os parâmetros são sintéticos, e a simulação ainda não incorpora a variabilidade dos cinco níveis do protocolo de Manchester. Além disso, o critério de redução de espera do SAPEVO-M foi estimado antes da simulação, que depois mediu um ganho um pouco diferente (19,7 min no lugar de 18,4).</div></details>
+  <details><summary>Por que A1 e não A2, que é mais barata?</summary><div class="body">A2 custa R$ 2,8 mi, mas atende só 3 das 6 metas do CFM. A1 é a única que atende as 6 e tem o menor custo por minuto de espera reduzido entre as quatro alternativas (R$ 0,213 mi), com payback de 2,8 anos.</div></details>
+  <details><summary>Quais são as limitações?</summary><div class="body">Os parâmetros são sintéticos, e a simulação ainda não incorpora a variabilidade dos cinco níveis do protocolo de Manchester. Além disso, o critério de redução de espera do SAPEVO-M foi estimado antes da simulação, que depois mediu ganhos diferentes: A1 reduziu 19,7 min (estimativa: 18,4) e A4 reduziu 16,1 min (estimativa: 22,3). Com os valores medidos, A1 passa a liderar também esse critério.</div></details>
   <details><summary>Quais são os próximos passos?</summary><div class="body">(i) Incluir o protocolo de Manchester completo na simulação. (ii) Aplicar o framework em UTIs e centros cirúrgicos. (iii) Integrar programação de escalas por turno. (iv) Criar um painel de indicadores de fila em tempo real.</div></details>
 </section>
 
