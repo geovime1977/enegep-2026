@@ -266,7 +266,7 @@ table.txt{font-size:13px}
     <div class="rk"><div class="lbl"><span>4 · Reinvenção Forçada</span><b>31%</b></div><div class="track"><div class="fill" style="width:31%"></div></div></div>
     <div class="rk"><div class="lbl"><span>1 · Vento Favorável</span><b>8%</b></div><div class="track"><div class="fill" style="width:8%"></div></div></div>
     <div class="rk"><div class="lbl"><span>2 · Mercado Premium</span><b>4%</b></div><div class="track"><div class="fill" style="width:4%"></div></div></div>
-    <p class="legend">Chance de crescer mais de 15% até 2030: 63% (Premium), 41% (Favorável), 22% (Reinvenção), 9% (Pressão Máxima).</p>
+    <p class="legend">P(crescimento &gt; 15%) reportada no artigo: 63% (Premium), 41% (Favorável), 22% (Reinvenção), 9% (Pressão Máxima). O artigo não define se o crescimento é acumulado até 2030 ou anual.</p>
   </div>
   <p class="small" style="margin-top:10px">“Custos sobem e o consumidor não muda” não soa dramático. Quantificado, o cenário 3 é quase uma moeda ao ar sobre a saúde financeira da empresa.</p>
 </section>
@@ -358,7 +358,7 @@ table.txt{font-size:13px}
         <tr><td>Resiliência</td><td>−0,003</td><td>C · Canais</td></tr>
         <tr><td>Viabilidade</td><td>+0,020</td><td>C · Canais</td></tr>
         <tr><td>Viabilidade</td><td>−0,065</td><td>A · Clean label</td></tr>
-        <tr><td>Rentabilidade</td><td>+0,096</td><td>A · Clean label</td></tr>
+        <tr><td>Rentabilidade</td><td>+0,095</td><td>A · Clean label</td></tr>
       </tbody>
     </table></div>
     <p class="ex">Mudanças de dois ou três milésimos num peso já trocam o primeiro lugar. É por isso que o framework recomenda portfólio e planos por cenário, e não uma aposta única.</p>
@@ -507,7 +507,8 @@ table.txt{font-size:13px}
   <details><summary>Por que o cenário 3 é o achado principal?</summary><div class="body">Porque, descrito em palavras (“custos sobem e o consumidor não muda”), ele não parece grave. A simulação mostra 47% de chance de EBITDA abaixo de 5%, quase uma moeda ao ar. É o tipo de risco que a análise qualitativa não revela.</div></details>
   <details><summary>Por que não escolher a estratégia com maior escore?</summary><div class="body">Os três escores estão numa faixa de 0,019, e um ajuste de dois milésimos num único peso já troca o líder. Escolher um vencedor seria precisão falsa. O framework recomenda portfólio, com a ênfase ajustada pelo cenário que se materializar.</div></details>
   <details><summary>O que é um gatilho e por que ele importa?</summary><div class="body">É um indicador com limiar definido, como “EBITDA abaixo de 6% por dois trimestres”. Quando ele dispara, o plano daquele cenário já está pactuado: a empresa age antes de ser surpreendida.</div></details>
-  <details><summary>Qual é o papel da IA, de fato?</summary><div class="body">Dois: ler e triar grande volume de fontes no diagnóstico (PLN) e sintetizar alternativas estratégicas a partir das narrativas dos cenários (LLM). Ambos reduzem tempo de diagnóstico. A acurácia ainda não foi medida, e isso está declarado como limitação.</div></details>
+  <details><summary>Qual é o papel da IA, de fato?</summary><div class="body">Dois: ler e triar grande volume de fontes no diagnóstico (PLN) e sintetizar alternativas estratégicas a partir das narrativas dos cenários (LLM). A expectativa é reduzir o tempo de diagnóstico, mas nem o tempo nem a acurácia foram medidos, e isso está declarado como limitação.</div></details>
+  <details><summary>Se clean label é tendência consolidada, por que vira eixo de incerteza?</summary><div class="body">O inventário PESTEL classifica a mudança de hábitos (clean label) como tendência consolidada. O eixo da matriz é a preferência do consumidor, ou seja, a velocidade e o alcance dessa mudança na base de clientes da AlimPro, que é incerta. O artigo não explicita essa passagem, e é um ponto a detalhar na aplicação real.</div></details>
   <details><summary>Por que métodos mais simples (Monte Carlo, AHP, Programação Linear)?</summary><div class="body">Porque PME raramente tem séries longas de dados nem equipe analítica. Método que a empresa não consegue alimentar não roda. A escolha foi deliberada: sofisticação suficiente, com viabilidade.</div></details>
   <details><summary>Que dados minha empresa precisaria fornecer?</summary><div class="body">Faturamento, margens e estrutura de custos dos últimos anos, composição do custo dos produtos (quanto depende de insumos e câmbio), canais de venda e acesso aos gestores para entrevistas e oficinas. Os dados externos vêm de relatórios setoriais e fontes públicas.</div></details>
   <details><summary>Quanto tempo leva?</summary><div class="body">Cerca de 12 semanas: 3 de diagnóstico, 5 de análise e 4 de entrega e pactuação. Depois, revisão trimestral dos indicadores e dos gatilhos.</div></details>

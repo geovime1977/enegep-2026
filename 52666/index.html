@@ -276,7 +276,7 @@ td.fr{color:var(--ok);font-weight:700}
 
 <section id="alocacao">
   <h2>Comparação de regras de alocação <span class="badge sint">instância sintética</span></h2>
-  <p class="small">Três estratégias aplicadas à mesma instância de 50 municípios e 10 metas, com resultados expressos na escala das 73 metas do PNE.</p>
+  <p class="small">Três estratégias aplicadas à mesma instância sintética de 50 municípios. A legenda do artigo fala em 10 metas, mas os resultados são reportados sobre as 73 metas do PNE.</p>
   <div class="card rank strat">
     <div class="rk"><div class="lbl"><span>(a) Proporcional às matrículas (regra atual)</span><b>64%</b></div><div class="track"><div class="fill a" style="width:64%"></div></div><p class="legend" style="margin-top:4px">47/73 metas · gasto 9,8% do PIB · robustez 42% · equidade baixa</p></div>
     <div class="rk"><div class="lbl"><span>(b) Programação por metas sem DEA</span><b>79%</b></div><div class="track"><div class="fill b" style="width:79%"></div></div><p class="legend" style="margin-top:4px">58/73 metas · gasto 9,5% do PIB · robustez 61% · equidade média</p></div>
@@ -327,7 +327,7 @@ td.fr{color:var(--ok);font-weight:700}
     <p><b>Restrição de cada meta</b><span class="f formula">Σⱼ Σₜ cᵢⱼₜ · xᵢⱼₜ + dᵢ⁻ − dᵢ⁺ = gᵢ</span>O que se investe na meta i, mais o que falta (d⁻), menos o que sobra (d⁺), fecha exatamente no valor-meta gᵢ.</p>
     <p><b>Custo ajustado pela eficiência</b><span class="f formula">c′ = c / θ^γ  →  Cambuci, θ = 0,88, γ = 1:  c′ = c / 0,88 = 1,136 · c</span>Cada resultado em Cambuci custa 13,6% a mais no modelo do que num município da fronteira.</p>
     <p><b>Orçamento incerto</b> — fração do PIB sorteada numa triangular com mínimo 5,5%, moda 7,5% e máximo 10%:<span class="f formula">média = (5,5 + 7,5 + 10) / 3 = 7,67% do PIB</span><span class="f formula">σ = √[(a² + b² + c² − ab − ac − bc) / 18] = 0,92 p.p.</span></p>
-    <p><b>Orçamento “seguro” a 95%</b><span class="f formula">E[B] − Φ⁻¹(0,95) · σ = 7,67 − 1,645 × 0,92 = 6,15% do PIB</span>O plano é montado para caber em cerca de 6,15% do PIB, valor que é superado em 95% dos cenários.</p>
+    <p><b>Orçamento “seguro” a 95%</b><span class="f formula">E[B] − Φ⁻¹(0,95) · σ = 7,67 − 1,645 × 0,92 = 6,15% do PIB</span>Com essa distribuição, o teto seguro fica em cerca de 6,15% do PIB, valor que é superado em 95% dos cenários. A Tabela 4 do artigo reporta gasto de 9,1% do PIB para o plano proposto, e o artigo não explica como os dois números se conciliam.</p>
     <p><b>Equidade</b><span class="f formula">Σⱼ xᵢⱼₜ ≥ δ · Rⱼ,   δ ≥ 1,2 se IDHM &lt; mediana</span>Municípios mais pobres recebem pelo menos 20% acima do piso.</p>
   </div></details>
 
@@ -348,7 +348,7 @@ td.fr{color:var(--ok);font-weight:700}
       </tbody>
     </table></div>
     <p><span class="f formula">ganho: 68 − 47 = 21 metas a mais   ·   economia: 9,8% − 9,1% = 0,7 p.p. do PIB</span>A estratégia proposta cumpre mais metas gastando menos, e é a única que passa no critério de robustez (≥ 80%).</p>
-    <p class="note">Estes resultados vêm da instância sintética de 50 municípios e 10 metas, expressos na escala das 73 metas do PNE.</p>
+    <p class="note">Estes resultados vêm da instância sintética de 50 municípios. A legenda do artigo fala em 10 metas, mas os resultados são reportados sobre as 73 metas do PNE.</p>
   </div></details>
 </section>
 
@@ -388,7 +388,7 @@ td.fr{color:var(--ok);font-weight:700}
   <details><summary>Orientação a output</summary><div class="body">Pergunta quanto a DMU poderia <b>aumentar</b> seus produtos mantendo os insumos. É a orientação natural para educação, em que o objetivo é melhorar o aprendizado, não cortar gasto.</div></details>
   <details><summary>θ (escore de eficiência) e φ</summary><div class="body">φ é quanto os produtos poderiam crescer. O escore é θ = 1/φ, entre 0 e 1.<p class="ex">Niterói: θ = 0,9683, ou seja, φ = 1,033: poderia ter cerca de 3,3% mais IDEB com os mesmos insumos.</p></div></details>
   <details><summary>Folgas (slacks) e ε</summary><div class="body">Folgas são excessos de insumo ou faltas de produto que sobram mesmo depois do ajuste radial. ε é um número muito pequeno que dá prioridade ao ajuste principal na função objetivo.</div></details>
-  <details><summary>Poder de discriminação</summary><div class="body">Capacidade do DEA de separar eficientes de ineficientes. Pela regra prática, é preciso ter pelo menos 3 × (insumos + produtos) DMUs: 3 × 4 = 12. O piloto tem exatamente 12, por isso metade da amostra sai na fronteira. Com 5.570 municípios, o problema desaparece.</div></details>
+  <details><summary>Poder de discriminação</summary><div class="body">Capacidade do DEA de separar eficientes de ineficientes. Pela regra prática, é preciso ter pelo menos 3 × (insumos + produtos) DMUs: 3 × 4 = 12. O piloto tem exatamente 12, e isso ajuda a explicar por que metade da amostra sai na fronteira. Com 5.570 municípios, esse efeito diminui.</div></details>
 
   <div class="cat">Programação por Metas Estocástica</div>
   <details><summary>Programação por Metas (Goal Programming)</summary><div class="body">Técnica de Charnes e Cooper (1961) para vários objetivos em conflito. Em vez de maximizar um único objetivo, minimiza o quanto o plano fica longe de cada meta.</div></details>
@@ -398,7 +398,7 @@ td.fr{color:var(--ok);font-weight:700}
   <details><summary>Custo ajustado pela eficiência (γ)</summary><div class="body"><span class="f formula">c′ = c / θ^γ</span> Quanto menor a eficiência θ, mais caro fica cada resultado no município. γ, entre 0 e 1, regula a força dessa penalização. É o parâmetro mais influente do modelo (elasticidade de 0,38).</div></details>
   <details><summary>Orçamento aleatório α(ω)</summary><div class="body">Fração do PIB destinada à educação, sorteada entre 5,5% e 10% numa distribuição triangular com moda de 7,5%.</div></details>
   <details><summary>Distribuição triangular</summary><div class="body">Distribuição definida por mínimo, mais provável e máximo. É útil quando só se conhecem esses três valores.</div></details>
-  <details><summary>Restrição de risco orçamentário (CVaR, β = 0,95)</summary><div class="body">Garante que o plano caiba no orçamento mesmo em 95% dos cenários desfavoráveis de PIB. CVaR (<i>Conditional Value at Risk</i>) é a perda média nos piores casos, além do limite de 95%.</div></details>
+  <details><summary>Restrição de risco orçamentário (CVaR, β = 0,95)</summary><div class="body">Garante que o plano caiba no orçamento mesmo em 95% dos cenários desfavoráveis de PIB. CVaR (<i>Conditional Value at Risk</i>) é a perda média nos piores casos, além do limite de 95%. A fórmula usada no artigo, E[B] − Φ⁻¹(β)·σ, é a de um quantil (VaR) sob distribuição normal; um CVaR em sentido estrito exigiria a média da cauda.</div></details>
   <details><summary>Restrição de equidade (δ)</summary><div class="body">Piso mínimo de recursos por região. Municípios com IDHM abaixo da mediana recebem fator δ ≥ 1,2.</div></details>
   <details><summary>Programação Dinâmica e princípio de Bellman</summary><div class="body">Decisões em sequência no tempo: o melhor plano para os anos seguintes depende do estado alcançado agora. Aqui o princípio aparece na ordem das metas ao longo dos 10 anos, porque alfabetizar cedo é pré-requisito para as metas seguintes.</div></details>
   <details><summary>Intertemporalidade</summary><div class="body">Reconhecer que decisões de um ano afetam os anos seguintes. Está no índice t = 1…10 da variável de decisão.</div></details>
@@ -447,7 +447,7 @@ td.fr{color:var(--ok);font-weight:700}
     <li>AOUNI, B.; KETTANI, O. Goal programming model: a glorious history and a promising future. <i>European Journal of Operational Research</i>, v. 133, n. 2, 2001.</li>
     <li>BANKER, R. D.; CHARNES, A.; COOPER, W. W. Some models for estimating technical and scale inefficiencies in DEA. <i>Management Science</i>, v. 30, n. 9, 1984.</li>
     <li>BELLMAN, R. <i>Dynamic Programming</i>. Princeton University Press, 1957.</li>
-    <li>BRASIL. Lei nº 15.388, de 10 de março de 2026. Aprova o Plano Nacional de Educação 2026–2036.</li>
+    <li>BRASIL. Lei nº 15.388, de 14 de abril de 2026. Aprova o Plano Nacional de Educação 2026–2036.</li>
     <li>CHARNES, A.; COOPER, W. W. <i>Management Models and Industrial Applications of Linear Programming</i>. Wiley, 1961.</li>
     <li>CHARNES, A.; COOPER, W. W.; RHODES, E. Measuring the efficiency of decision making units. <i>European Journal of Operational Research</i>, v. 2, n. 6, 1978.</li>
     <li>FARAHANI, R. Z.; ASGARI, N. Combination of MCDM and covering techniques in a hierarchical model for facility location. <i>European Journal of Operational Research</i>, v. 176, n. 3, 2007.</li>
@@ -469,13 +469,13 @@ td.fr{color:var(--ok);font-weight:700}
   <h2>Perguntas frequentes</h2>
   <details><summary>O que está errado em distribuir por matrícula?</summary><div class="body">Nada no sentido legal, mas é um rateio, não uma alocação. O critério não enxerga se o município transforma o recurso em aprendizagem, de onde ele parte (desigualdade regional) nem a ordem entre metas, em que alfabetizar cedo é pré-requisito do resto.</div></details>
   <details><summary>Quais resultados vêm de dados reais?</summary><div class="body">O diagnóstico de eficiência (DEA) dos 12 municípios fluminenses, com dados do INEP e do SIOPE. Os 93% de metas, a robustez de 84% e a economia estimada vêm da instância sintética de 50 municípios e 10 metas.</div></details>
-  <details><summary>Por que Japeri, com IDEB 4,3, está na fronteira?</summary><div class="body">O DEA mede eficiência relativa. Com só 12 municípios e 4 variáveis, nenhuma combinação dos outros produz mais IDEB com menos insumo que Japeri, que tem gasto baixo. Isso é efeito do tamanho da amostra, que está no limite mínimo, e não um atestado de boa gestão. No modelo nacional, com 5.570 municípios, essa distorção desaparece.</div></details>
+  <details><summary>Por que Japeri, com IDEB 4,3, está na fronteira?</summary><div class="body">O DEA mede eficiência relativa. Japeri tem a menor relação alunos/docente do grupo (5,4). No modelo BCC, com retornos variáveis, nenhuma combinação dos outros municípios usa menos desse insumo, e quem tem o menor valor de algum insumo fica na fronteira por construção. Por isso Japeri aparece como referência mesmo com o menor IDEB. Não é atestado de boa gestão, e a amostra pequena, no limite mínimo de 12 DMUs, reforça o efeito.</div></details>
   <details><summary>Então Niterói gasta mal?</summary><div class="body">Gasta mais e entrega menos que vários municípios de referência: R$ 15,8 mil por aluno para IDEB 5,9, contra R$ 10,5 mil e 7,9 em Miracema. Isso não é prova de má gestão. Contexto socioeconômico, porte e outros fatores também pesam. O que o dado derruba é a ideia de que mais repasse gera, sozinho, mais aprendizagem.</div></details>
   <details><summary>AHP com 73 metas é viável?</summary><div class="body">Comparando todas aos pares, não: seriam 2.628 comparações. Por isso o AHP é feito em dois níveis: 6 eixos entre si e depois as metas dentro de cada eixo.</div></details>
   <details><summary>Quem definiu os pesos das metas?</summary><div class="body">Um painel de 12 especialistas do MEC, do INEP, do Consed e da Undime, com razão de consistência de 0,07 (abaixo do limite de 0,10). Os pesos dependem desse painel, e isso é uma das limitações declaradas.</div></details>
   <details><summary>Por que usar programação estocástica e não determinística?</summary><div class="body">Porque o orçamento do PNE depende do PIB, que é incerto. O modelo determinístico (estratégia b) atinge 79% das metas com robustez de 61%. O estocástico com DEA atinge 93% com robustez de 84%.</div></details>
   <details><summary>O que significa “penalizar” município ineficiente?</summary><div class="body">No cálculo, cada resultado custa mais onde a eficiência é menor (c′ = c/θ^γ). Na prática, o modelo tende a direcionar recursos para onde eles rendem mais, ou a condicioná-los a melhorias de gestão. A restrição de equidade impede que os municípios mais pobres fiquem sem recursos.</div></details>
-  <details><summary>De onde vem a economia de R$ 52 bilhões?</summary><div class="body">É uma estimativa feita a partir da diferença de 0,7 p.p. do PIB entre a regra atual e o framework, obtida na instância sintética. É uma ordem de grandeza para discussão, não uma previsão orçamentária.</div></details>
+  <details><summary>De onde vem a economia de R$ 52 bilhões?</summary><div class="body">É um valor reportado pelo artigo para a instância sintética, sem a memória de cálculo (PIB de referência, deflator e fluxo ano a ano). Deve ser lido como resultado reportado, para discussão, e não como previsão orçamentária.</div></details>
   <details><summary>Dá para aplicar no meu município ou estado?</summary><div class="body">O diagnóstico DEA, sim, com dados públicos: gasto por aluno (SIOPE), alunos por docente (Censo Escolar) e IDEB (INEP). A alocação completa exige definir as metas locais, seus pesos e os custos unitários.</div></details>
   <details><summary>Quais são as limitações e os próximos passos?</summary><div class="body">Limitações: a alocação foi testada em instância sintética; o piloto DEA está no limite de discriminação; os pesos dependem do painel; a qualidade dos dados do SIOPE varia entre municípios; e a instância completa é pesada (cerca de 4,2 horas). Próximo passo: aprendizado por reforço para atualizar a alocação à medida que chegam novos dados de monitoramento do PNE.</div></details>
 </section>
