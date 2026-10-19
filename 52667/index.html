@@ -383,6 +383,27 @@ table.txt{font-size:13px}
   <input class="search" id="q" type="search" placeholder="Buscar termo (ex.: MICMAC, gatilho, EBITDA)" aria-label="Buscar termo">
   <div id="gl">
 
+  <div class="cat">Letras, símbolos e notação das fórmulas</div>
+  <p class="muted small">Tudo o que aparece nas contas desta página: letras gregas (com a pronúncia), letras latinas usadas como variáveis e sinais de operação. Com esta lista dá para refazer cada cálculo da seção “Os cálculos”.</p>
+  <details><summary>λ — lambda (lâmbda)</summary><div class="body">Letra L do alfabeto grego. No AHP, <b>λmax</b> é o maior autovalor da matriz de comparações par a par. Ele entra no teste de consistência: <span class="f">CI = (λmax − n) / (n − 1)</span> Quanto mais perto de n (número de critérios), mais coerentes são os julgamentos.</div></details>
+  <details><summary>Σ — sigma maiúsculo (somatório)</summary><div class="body">Indica uma soma de vários termos. <span class="f formula">Σ xᵢ = x₁ + x₂ + … + xₙ</span> O índice embaixo (i, j, k) diz o que está sendo percorrido.</div></details>
+
+  <details><summary>A e w — matriz e vetor de pesos (AHP)</summary><div class="body">A é a matriz de comparações par a par. w é o vetor de pesos. <span class="f">A · w = λmax · w</span> n é o número de critérios (aqui 4). n(n − 1)/2 = 6 comparações.</div></details>
+  <details><summary>CI, RI, CR — consistência do AHP</summary><div class="body">CI = (λmax − n)/(n − 1) mede a incoerência. RI é o índice aleatório de Saaty (0,90 para 4 critérios). CR = CI/RI e aceita-se CR &lt; 0,10.</div></details>
+  <details><summary>Escore — soma ponderada</summary><div class="body"><span class="f">Escore = Σ peso × prioridade</span> Multiplica a prioridade da alternativa em cada critério pelo peso do critério e soma.<p class="ex">B: 0,35×0,31 + 0,30×0,42 + 0,20×0,38 + 0,15×0,18 = 0,3375.</p></div></details>
+  <details><summary>P(X &lt; 5) — probabilidade na triangular</summary><div class="body">Chance de a variável X (aqui, a margem EBITDA em %) ficar abaixo de 5. Abaixo da moda c: <span class="f">P(X &lt; x) = (x − a)² / [(b − a)(c − a)]</span>, com a mínimo, b máximo e c moda.</div></details>
+  <details><summary>Crescimento anual composto</summary><div class="body"><span class="f">(valor final / valor inicial)^(1/anos) − 1</span><p class="ex">(29,1/28)^(1/5) − 1 = 0,8% ao ano.</p></div></details>
+  <details><summary>a, b, c — parâmetros da distribuição triangular</summary><div class="body">Mínimo, máximo e valor mais provável (moda) de uma variável incerta. A média é <span class="f">(mínimo + moda + máximo) / 3</span>. Leia a legenda de cada fórmula para ver qual letra é qual.</div></details>
+  <details><summary>p, N e erro-padrão</summary><div class="body">p é a proporção observada nas simulações e N, o número de cenários (aqui 10.000). <span class="f">erro-padrão = √[p(1 − p)/N]</span> mede a incerteza da própria simulação: quanto maior N, menor o erro.</div></details>
+  <details><summary>± e 1,96 — margem de um IC 95%</summary><div class="body">“±” dá o intervalo para cima e para baixo. 1,96 é o número de desvios-padrão que cobre 95% de uma distribuição normal. <span class="f">IC 95% = estimativa ± 1,96 × erro-padrão</span></div></details>
+  <details><summary>p.p. — ponto percentual</summary><div class="body">Diferença entre duas porcentagens. De 9,8% para 9,1% é uma queda de 0,7 p.p. (e não de 0,7%).</div></details>
+  <details><summary>Índices subscritos (xᵢ, xⱼ, xₖ)</summary><div class="body">A letrinha embaixo identifica <b>de qual item</b> se fala. xᵢ é “o x do item i”. Em um somatório, o índice percorre todos os itens.</div></details>
+  <details><summary>aⁿ e x^y — potência</summary><div class="body">Multiplica a base por ela mesma: <span class="f">a³ = a · a · a</span> Expoente fracionário é raiz: <span class="f">x^(1/5)</span> é a raiz quinta de x.</div></details>
+  <details><summary>√ — raiz quadrada</summary><div class="body">Número que, multiplicado por ele mesmo, dá o valor de dentro. <span class="f">√0,0000134 ≈ 0,0037</span> Aparece no desvio-padrão e no erro-padrão.</div></details>
+  <details><summary>·, ×, ÷ e / — operações</summary><div class="body">“·” e “×” são multiplicação. “÷” e “/” são divisão. <span class="f">λ / (c · μ)</span> é λ dividido pelo produto de c por μ.</div></details>
+  <details><summary>→ e ≈</summary><div class="body">“→” indica “o que resulta disso” na sequência da conta. “≈” quer dizer aproximadamente igual, depois de arredondar.</div></details>
+  <details><summary>&lt;, ≤, &gt;, ≥ — desigualdades</summary><div class="body">Menor que, menor ou igual, maior que, maior ou igual. Nas restrições de um modelo, dizem o limite que a solução não pode ultrapassar.</div></details>
+
   <div class="cat">Cenários prospectivos</div>
   <details><summary>Cenários prospectivos</summary><div class="body">Descrições de futuros alternativos e igualmente plausíveis. O objetivo não é acertar qual virá, e sim preparar a organização para responder a qualquer um deles.</div></details>
   <details><summary>Herman Kahn e a RAND Corporation</summary><div class="body">Origem do método, nos anos 1950, para planejamento militar nos Estados Unidos.</div></details>

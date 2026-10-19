@@ -8,7 +8,7 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:title" content="Fluxo em prontos-socorros: Filas, SAPEVO-M e Simulação">
-<meta property="og:description" content="O gargalo é o exame, não o médico. Método, resultados, glossário com 55 termos e referencial do trabalho 51501 do ENEGEP 2026.">
+<meta property="og:description" content="O gargalo é o exame, não o médico. Método, resultados, glossário com 69 termos e referencial do trabalho 51501 do ENEGEP 2026.">
 <meta property="og:url" content="https://geovime1977.github.io/enegep-2026/51501/">
 <meta property="og:image" content="https://geovime1977.github.io/enegep-2026/51501/og.png">
 <meta property="og:image:width" content="1200">
@@ -377,6 +377,24 @@ footer{margin-top:36px;font-size:13px;color:var(--muted);text-align:center}
   <h2>Glossário: todos os termos</h2>
   <input class="search" id="q" type="search" placeholder="Buscar termo (ex.: Erlang, Spearman, Manchester)" aria-label="Buscar termo">
   <div id="gl">
+
+  <div class="cat">Letras, símbolos e notação das fórmulas</div>
+  <p class="muted small">Tudo o que aparece nas contas desta página: letras gregas (com a pronúncia), letras latinas usadas como variáveis e sinais de operação. Com esta lista dá para refazer cada cálculo da seção “Os cálculos”.</p>
+  <details><summary>λ — lambda (lâmbda)</summary><div class="body">Letra L do alfabeto grego. Em filas, é a <b>taxa de chegada</b>: quantos pacientes chegam por hora a uma etapa.<p class="ex">Exames: λ = 8,1 pacientes/h.</p></div></details>
+  <details><summary>μ — mi (ou mu)</summary><div class="body">Letra M do alfabeto grego. Em filas, é a <b>taxa de serviço</b>: quantos pacientes <b>um</b> atendente conclui por hora. O inverso, 1/μ, é o tempo médio de cada atendimento.<p class="ex">Exames: μ = 3,2/h, cerca de 19 min por paciente.</p></div></details>
+  <details><summary>ρ — rô</summary><div class="body">Letra R do alfabeto grego. Aparece com dois sentidos nesta página: <b>utilização</b> do servidor na teoria das filas (<span class="f">ρ = λ / (c · μ)</span>, precisa ficar abaixo de 1) e <b>correlação de Spearman</b> entre duas ordenações (de −1 a +1). O contexto diz qual é qual.<p class="ex">Exames: ρ = 0,844. SAPEVO-M × AHP: ρ de Spearman = 1,00.</p></div></details>
+  <details><summary>Σ — sigma maiúsculo (somatório)</summary><div class="body">Indica uma soma de vários termos. <span class="f formula">Σ xᵢ = x₁ + x₂ + … + xₙ</span> O índice embaixo (i, j, k) diz o que está sendo percorrido.</div></details>
+
+  <details><summary>P₀, P(espera), Lq, Wq, W, L</summary><div class="body">Os indicadores da fila, na ordem em que são calculados: P₀ (sistema vazio) → P(espera) (Erlang C) → Lq (fila) → Wq (espera) → W (tempo total) → L (pacientes no sistema). Cada um tem verbete próprio em “Teoria das Filas”.</div></details>
+  <details><summary>h → min — conversão de unidades</summary><div class="body">As taxas estão em pacientes por hora, então Wq e W saem em horas. Para minutos, multiplique por 60.<p class="ex">0,480 h × 60 = 28,8 min.</p></div></details>
+  <details><summary>d e n — no ρ de Spearman</summary><div class="body">d é a diferença de posição de cada alternativa entre os dois rankings. n é o número de alternativas (aqui 4). Σd² soma os quadrados dessas diferenças.</div></details>
+  <details><summary>v, vᵢₖ e Aᵢ — no SAPEVO-M</summary><div class="body">Aᵢ é a alternativa i (A1 a A4). vᵢₖ é o valor normalizado da alternativa i no critério k, entre 0 e 1: <span class="f">v = (soma − mín) / (máx − mín)</span></div></details>
+  <details><summary>Índices subscritos (xᵢ, xⱼ, xₖ)</summary><div class="body">A letrinha embaixo identifica <b>de qual item</b> se fala. xᵢ é “o x do item i”. Em um somatório, o índice percorre todos os itens.</div></details>
+  <details><summary>n! — fatorial</summary><div class="body">Produto de todos os inteiros de 1 até n. <span class="f">4! = 4 × 3 × 2 × 1 = 24</span> Por convenção, 0! = 1.</div></details>
+  <details><summary>aⁿ e x^y — potência</summary><div class="body">Multiplica a base por ela mesma: <span class="f">a³ = a · a · a</span> Expoente fracionário é raiz: <span class="f">x^(1/5)</span> é a raiz quinta de x.</div></details>
+  <details><summary>·, ×, ÷ e / — operações</summary><div class="body">“·” e “×” são multiplicação. “÷” e “/” são divisão. <span class="f">λ / (c · μ)</span> é λ dividido pelo produto de c por μ.</div></details>
+  <details><summary>→ e ≈</summary><div class="body">“→” indica “o que resulta disso” na sequência da conta. “≈” quer dizer aproximadamente igual, depois de arredondar.</div></details>
+  <details><summary>&lt;, ≤, &gt;, ≥ — desigualdades</summary><div class="body">Menor que, menor ou igual, maior que, maior ou igual. Nas restrições de um modelo, dizem o limite que a solução não pode ultrapassar.</div></details>
 
   <div class="cat">Teoria das Filas</div>
   <details><summary>Pesquisa Operacional (PO)</summary><div class="body">Área que usa modelos matemáticos para apoiar decisões sobre recursos escassos: quanto, onde, quando e em que ordem. Este trabalho combina três métodos de PO.</div></details>
