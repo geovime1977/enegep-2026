@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de Financiamentos</title>
+<meta name="description" content="Compare ofertas de financiamento de veículos e imóveis pelo CET, custo total e valor presente, e descubra a melhor combinação de entrada e prazo.">
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#14213d;--muted:#5b6782;--line:#dde3ef;--brand:#13306b;--brand2:#2357c6;--soft:#e9eff9;--ok:#0f7a4a;--ok-soft:#e6f5ed;--warn:#8a5a00;--warn-soft:#fff7e0;--bad:#b42318;--c1:#2357c6;--c2:#c2410c;--c3:#7c3aed}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1424;--card:#152038;--ink:#e7ecf6;--muted:#9aa7c2;--line:#26334f;--brand:#8fb0ff;--brand2:#8fb0ff;--soft:#1c2a47;--ok:#4ade80;--ok-soft:#12301f;--warn:#fbbf24;--warn-soft:#33270a;--bad:#f87171;--c1:#6d9bff;--c2:#fb923c;--c3:#a78bfa}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:1040px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:24px;color:var(--brand);margin:0 0 4px}h2{font-size:18px;color:var(--brand);margin:0 0 12px}h3{font-size:15px;margin:16px 0 8px}
+.m{color:var(--muted);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+label{display:block;font-size:13px;color:var(--muted)}
+input,select{width:100%;margin-top:4px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+input[type=checkbox]{width:auto;margin-right:6px}
+.chk{display:flex;align-items:center;margin-top:24px}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:8px;cursor:pointer}
+button:hover{border-color:var(--brand2)}
+button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+@media (prefers-color-scheme:dark){button.on{color:#0d1424}}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.oferta{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px;background:var(--bg)}
+.oferta .topo{display:flex;gap:8px;align-items:end;margin-bottom:8px}.oferta .topo label{flex:1}
+.tabela{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:600;font-size:13px}
+tr.melhor td{background:var(--ok-soft)}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--ok-soft);color:var(--ok);margin-left:6px}
+.aviso{background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:10px 12px;font-size:14px}
+.ok{background:var(--ok-soft);color:var(--ok);border-radius:10px;padding:10px 12px;font-size:14px}
+.barra{display:flex;height:18px;border-radius:5px;overflow:hidden;min-width:200px}.barra i{display:block}
+.leg span{margin-right:14px;font-size:13px;color:var(--muted)}.leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+.heat td{text-align:center;font-size:12px;padding:5px 6px}.heat td.nao{color:var(--muted);opacity:.45}.heat td.best{outline:2px solid var(--ok);font-weight:700}
+.abas{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 0}
+.painel{display:none}.painel.on{display:block}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:10px}
+.kpi{background:var(--soft);border-radius:10px;padding:10px 12px}.kpi b{display:block;font-size:20px;color:var(--brand)}.kpi span{font-size:12px;color:var(--muted)}
+details{margin-top:8px}summary{cursor:pointer;color:var(--brand2)}
+@media (max-width:560px){h1{font-size:20px}}
+</style>
+</head>
+<body><main>
+<h1>Simulador de Financiamentos</h1>
+<p class="m">Veículos e imóveis · compara ofertas pelo <b>CET</b>, pelo custo total e pelo <b>valor presente</b>, e busca a melhor combinação de entrada e prazo. Tudo roda no seu navegador; nada é enviado a lugar nenhum.</p>
+
+<div class="card">
+  <div class="seg" id="tipo">
+    <button data-t="veiculo">🚗 Veículo</button><button data-t="imovel">🏠 Imóvel</button>
+  </div>
+  <h2 style="margin-top:16px">Cenário</h2>
+  <div class="grid" id="cenario"></div>
+</div>
+
+<div class="card">
+  <h2>Ofertas para comparar</h2>
+  <p class="m">Os valores iniciais são exemplos ilustrativos. Troque pelas propostas reais que você recebeu (taxa, seguros e tarifas constam na simulação do banco).</p>
+  <div id="ofertas"></div>
+  <button id="add">+ Adicionar oferta</button>
+</div>
+
+<div class="abas" id="abas">
+  <button data-p="p1" class="on">Comparar</button><button data-p="p2">Otimizar entrada e prazo</button><button data-p="p3">Amortização extra</button><button data-p="p4">Como ler</button>
+</div>
+
+<section class="painel on card" id="p1">
+  <div class="grid" style="max-width:300px"><label>Ordenar por<select id="crit">
+    <option value="cet">Menor CET</option><option value="vp">Menor valor presente</option><option value="total">Menor custo total</option><option value="parcela">Menor parcela</option></select></label></div>
+  <div id="veredito" style="margin:12px 0"></div>
+  <div class="tabela" id="rank"></div>
+  <p class="leg" style="margin-top:12px"><span><i style="background:var(--c1)"></i>Principal</span><span><i style="background:var(--c2)"></i>Juros</span><span><i style="background:var(--c3)"></i>Seguros e tarifas</span></p>
+</section>
+
+<section class="painel card" id="p2">
+  <div class="grid" id="otimCfg"></div>
+  <div id="otimRes" style="margin-top:14px"></div>
+</section>
+
+<section class="painel card" id="p3">
+  <div class="grid" style="max-width:300px"><label>Oferta<select id="extraOferta"></select></label></div>
+  <div class="tabela" id="extraRes" style="margin-top:12px"></div>
+  <h3>Cronograma</h3>
+  <div class="seg"><button id="csv">Baixar CSV completo</button></div>
+  <div class="tabela" id="crono" style="margin-top:10px"></div>
+</section>
+
+<section class="painel card" id="p4">
+  <h2>Como ler os resultados</h2>
+  <p><b>CET (Custo Efetivo Total)</b> é a taxa que embute juros, seguros, tarifas e IOF. Dois bancos com a mesma taxa de juros podem ter CETs bem diferentes. É a primeira métrica de comparação, mas só vale entre ofertas com o mesmo prazo e a mesma entrada.</p>
+  <p><b>Valor presente (VP)</b> traz entrada e parcelas a hoje usando a sua <i>taxa de oportunidade</i>, isto é, quanto o seu dinheiro renderia se não fosse gasto agora (por exemplo, um CDB ou o Tesouro Selic líquido de imposto). Se o CET está acima dessa taxa, entrar com mais dinheiro compensa; se está abaixo, vale preservar o caixa e financiar mais.</p>
+  <p><b>Price</b> tem parcela fixa e começa com mais juros; <b>SAC</b> amortiza igual todo mês, começa com a parcela mais alta e termina mais barata, e quase sempre custa menos no total. O otimizador respeita o teto de parcela que você definiu.</p>
+  <p><b>Correção</b> (TR ou IPCA nos imóveis) é aplicada ao saldo devedor todo mês, e as parcelas são recalculadas. <b>Amortização extra</b> encurta o prazo mantendo a parcela (Price) ou a amortização (SAC).</p>
+  <p><b>IOF</b> de veículos: 0,38% sobre o principal mais 0,0082% ao dia sobre cada amortização, limitado a 365 dias. As alíquotas são editáveis em código e mudam por decreto; confirme na sua proposta.</p>
+  <div class="aviso">Simulação educativa. O cálculo é determinístico a partir das taxas que você informa; propostas reais podem ter regras próprias (taxas por faixa de entrada, seguros por idade, carência, avaliação do imóvel, ITBI e registro). Confira sempre o CET que o banco é obrigado a informar no contrato.</div>
+</section>
+
+<script src="motor.js"></script>
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const brl = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const pct = (v, d = 2) => (v * 100).toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d }) + '%';
+const CHAVE = 'fin-sim-v1';
+
+const PADRAO = {
+  veiculo: {
+    cen: { valorBem: 90000, entrada: 27000, prazo: 48, renda: 9000, comp: 30, oport: 1.0, caixa: 40000, descAvista: 0, minEntrada: 0 },
+    ofertas: [
+      { nome: 'Banco A', taxa: 1.59, un: 'am', sistema: 'price', corr: 0, segPct: 0.02, segFixo: 0, tarMes: 0, tarIni: 0, iof: true, fin: true },
+      { nome: 'Banco B', taxa: 1.45, un: 'am', sistema: 'price', corr: 0, segPct: 0.03, segFixo: 0, tarMes: 0, tarIni: 1200, iof: true, fin: true },
+      { nome: 'Banco C', taxa: 1.72, un: 'am', sistema: 'price', corr: 0, segPct: 0, segFixo: 0, tarMes: 0, tarIni: 0, iof: true, fin: true },
+    ],
+  },
+  imovel: {
+    cen: { valorBem: 500000, entrada: 150000, prazo: 360, renda: 18000, comp: 30, oport: 0.85, caixa: 220000, descAvista: 0, minEntrada: 20 },
+    ofertas: [
+      { nome: 'Banco A (SAC)', taxa: 11.19, un: 'aa', sistema: 'sac', corr: 2.0, segPct: 0.035, segFixo: 25, tarMes: 0, tarIni: 0, iof: false, fin: true },
+      { nome: 'Banco B (Price)', taxa: 10.49, un: 'aa', sistema: 'price', corr: 2.0, segPct: 0.04, segFixo: 25, tarMes: 0, tarIni: 3000, iof: false, fin: false },
+      { nome: 'Banco C (SAC)', taxa: 10.99, un: 'aa', sistema: 'sac', corr: 2.0, segPct: 0.03, segFixo: 30, tarMes: 0, tarIni: 0, iof: false, fin: true },
+    ],
+  },
+};
+let S = clone(PADRAO.veiculo); S.tipo = 'veiculo';
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+try { const salvo = JSON.parse(localStorage.getItem(CHAVE)); if (salvo && salvo.cen && salvo.ofertas && PADRAO[salvo.tipo]) S = salvo; } catch (e) {}
+const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify(S)); } catch (e) {} };
+
+const CAMPOS_CEN = [
+  ['valorBem', 'Valor do bem (R$)', 1000], ['entrada', 'Entrada (R$)', 1000], ['prazo', 'Prazo (meses)', 1],
+  ['renda', 'Renda mensal (R$)', 500], ['comp', 'Parcela máx. (% da renda)', 1], ['oport', 'Taxa de oportunidade (% a.m.)', 0.05],
+];
+
+function montaCenario() {
+  $('#cenario').innerHTML = CAMPOS_CEN.map(([k, r, st]) => `<label>${r}<input type="number" step="${st}" min="0" data-k="${k}" value="${S.cen[k]}"></label>`).join('');
+  $('#cenario').oninput = (e) => { const k = e.target.dataset.k; if (k) { S.cen[k] = parseFloat(e.target.value) || 0; calcula(); } };
+  document.querySelectorAll('#tipo button').forEach((b) => b.classList.toggle('on', b.dataset.t === S.tipo));
+}
+
+const CAMPOS_OF = [
+  ['taxa', 'Taxa de juros (%)', 0.01], ['un', 'Unidade', 'sel:am=% a.m.,aa=% a.a.'], ['sistema', 'Sistema', 'sel:price=Price (parcela fixa),sac=SAC (amortização fixa)'],
+  ['corr', 'Correção TR/IPCA (% a.a.)', 0.1], ['segPct', 'Seguro (% a.m. s/ saldo)', 0.005], ['segFixo', 'Seguro/taxa fixa (R$/mês)', 1],
+  ['tarMes', 'Tarifa mensal (R$)', 1], ['tarIni', 'Tarifa inicial/TAC (R$)', 100],
+];
+function montaOfertas() {
+  $('#ofertas').innerHTML = S.ofertas.map((o, idx) => `<div class="oferta" data-i="${idx}">
+    <div class="topo"><label>Nome<input data-k="nome" value="${o.nome.replace(/"/g, '&quot;')}"></label><button data-del="${idx}" title="Remover">✕</button></div>
+    <div class="grid">${CAMPOS_OF.map(([k, r, st]) => String(st).startsWith('sel:')
+      ? `<label>${r}<select data-k="${k}">${String(st).slice(4).split(',').map((p) => { const [v, t] = p.split('='); return `<option value="${v}"${o[k] === v ? ' selected' : ''}>${t}</option>`; }).join('')}</select></label>`
+      : `<label>${r}<input type="number" min="0" step="${st}" data-k="${k}" value="${o[k]}"></label>`).join('')}
+      <label class="chk"><input type="checkbox" data-k="iof"${o.iof ? ' checked' : ''}>Cobra IOF</label>
+      <label class="chk"><input type="checkbox" data-k="fin"${o.fin ? ' checked' : ''}>Financia IOF e tarifa inicial</label>
+    </div></div>`).join('');
+}
+$('#ofertas').addEventListener('input', (e) => {
+  const k = e.target.dataset.k, i = e.target.closest('.oferta')?.dataset.i;
+  if (!k || i == null) return;
+  const t = e.target;
+  S.ofertas[i][k] = t.type === 'checkbox' ? t.checked : t.tagName === 'SELECT' || k === 'nome' ? t.value : parseFloat(t.value) || 0;
+  calcula();
+});
+$('#ofertas').addEventListener('click', (e) => {
+  const d = e.target.dataset.del;
+  if (d != null && S.ofertas.length > 1) { S.ofertas.splice(+d, 1); montaOfertas(); calcula(); }
+});
+$('#add').onclick = () => { S.ofertas.push({ ...clone(S.ofertas[S.ofertas.length - 1]), nome: 'Oferta ' + (S.ofertas.length + 1) }); montaOfertas(); calcula(); };
+document.querySelectorAll('#tipo button').forEach((b) => b.onclick = () => { S = { ...clone(PADRAO[b.dataset.t]), tipo: b.dataset.t }; otim = null; montaCenario(); montaOfertas(); calcula(); });
+document.querySelectorAll('#abas button').forEach((b) => b.onclick = () => {
+  document.querySelectorAll('#abas button').forEach((x) => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.painel').forEach((p) => p.classList.toggle('on', p.id === b.dataset.p));
+});
+
+function paraMotor(o, extra = {}) {
+  const c = S.cen;
+  return {
+    valorBem: c.valorBem, entrada: c.entrada, prazo: c.prazo,
+    taxaAm: o.un === 'aa' ? Motor.aaParaAm(o.taxa / 100) : o.taxa / 100,
+    sistema: o.sistema, correcaoAm: Motor.aaParaAm((o.corr || 0) / 100),
+    seguroPct: o.segPct / 100, seguroFixo: o.segFixo, tarifaMensal: o.tarMes, tarifaInicial: o.tarIni,
+    iof: o.iof, financiarCustos: o.fin, taxaOport: c.oport / 100, ...extra,
+  };
+}
+// campos de oferta sem os do cenário (para o otimizador, que varia entrada e prazo)
+function ofertaMotor(o) { const { valorBem, entrada, prazo, taxaOport, ...resto } = paraMotor(o); return resto; }
+
+function barra(r) {
+  const tot = r.totalFinanciamento || 1, base = r.totalFinanciamento - r.custoCredito;
+  const j = r.totalJuros, o = Math.max(0, r.custoCredito - j);
+  return `<div class="barra" title="Principal ${brl(base)} · Juros ${brl(j)} · Seguros/tarifas/IOF ${brl(o)}"><i style="width:${base / tot * 100}%;background:var(--c1)"></i><i style="width:${j / tot * 100}%;background:var(--c2)"></i><i style="width:${o / tot * 100}%;background:var(--c3)"></i></div>`;
+}
+
+let ultimo = [];
+function calcula() {
+  salvar();
+  const c = S.cen;
+  if (c.valorBem <= 0 || c.prazo < 1 || c.entrada >= c.valorBem) {
+    $('#rank').innerHTML = '<div class="aviso">Informe um valor do bem maior que a entrada e um prazo de pelo menos 1 mês.</div>'; $('#veredito').innerHTML = ''; return;
+  }
+  ultimo = S.ofertas.map((o) => ({ o, res: Motor.simular(paraMotor(o)) }));
+  const crit = $('#crit').value, ord = Motor.ordenar(ultimo, crit);
+  const teto = c.renda * c.comp / 100, melhor = ord[0];
+  const metrica = { cet: ['CET', (r) => pct(r.cetAa) + ' a.a.'], vp: ['valor presente', (r) => brl(r.vp)], total: ['custo total', (r) => brl(r.totalPago)], parcela: ['parcela', (r) => brl(r.parcelaInicial)] }[crit];
+  const pior = ord[ord.length - 1];
+  let v = ord.length > 1
+    ? `<div class="ok"><b>${melhor.o.nome}</b> vence em ${metrica[0]} (${metrica[1](melhor.res)}). Em relação à pior oferta (${pior.o.nome}) você economiza <b>${brl(pior.res.totalPago - melhor.res.totalPago)}</b> no total pago e <b>${brl(pior.res.vp - melhor.res.vp)}</b> em valor presente.</div>`
+    : '';
+  const estouram = ord.filter((x) => x.res.parcelaInicial > teto + 0.005);
+  if (estouram.length) v += `<div class="aviso" style="margin-top:8px">Parcela acima do teto de ${brl(teto)} (${c.comp}% da renda): ${estouram.map((x) => x.o.nome).join(', ')}.</div>`;
+  $('#veredito').innerHTML = v;
+  $('#rank').innerHTML = `<table><tr><th>Oferta</th><th>Parcela inicial</th><th>Parcela final</th><th>Juros</th><th>CET a.m.</th><th>CET a.a.</th><th>Total pago</th><th>VP</th><th>Composição</th></tr>${ord.map((x, i) => {
+    const r = x.res;
+    return `<tr${i === 0 ? ' class="melhor"' : ''}><td>${x.o.nome}${i === 0 ? '<span class="tag">melhor</span>' : ''}</td><td>${brl(r.parcelaInicial)}</td><td>${brl(r.parcelaFinal)}</td><td>${pct(x.o.un === 'aa' ? x.o.taxa / 100 : Motor.amParaAa(x.o.taxa / 100))} a.a.</td><td>${pct(r.cetAm)}</td><td>${pct(r.cetAa)}</td><td>${brl(r.totalPago)}</td><td>${brl(r.vp)}</td><td>${barra(r)}</td></tr>`;
+  }).join('')}</table>`;
+  montaOtim(); calcOtim(); atualizaExtra();
+}
+$('#crit').onchange = calcula;
+
+// ---------- Otimizador ----------
+let otim = null;
+function montaOtim() {
+  if (!otim) otim = { idx: 0, caixa: S.cen.caixa, desc: S.cen.descAvista, minE: S.cen.minEntrada };
+  otim.idx = Math.min(otim.idx, S.ofertas.length - 1);
+  $('#otimCfg').innerHTML = `<label>Oferta<select data-o="idx">${S.ofertas.map((o, i) => `<option value="${i}"${i === otim.idx ? ' selected' : ''}>${o.nome}</option>`).join('')}</select></label>
+    <label>Caixa disponível p/ entrada (R$)<input type="number" min="0" step="1000" data-o="caixa" value="${otim.caixa}"></label>
+    <label>Entrada mínima (%)<input type="number" min="0" max="90" step="5" data-o="minE" value="${otim.minE}"></label>
+    <label>Desconto à vista (%)<input type="number" min="0" step="0.5" data-o="desc" value="${otim.desc}"></label>`;
+}
+$('#otimCfg').addEventListener('input', (e) => {
+  const k = e.target.dataset.o; if (!k) return;
+  otim[k] = k === 'idx' ? +e.target.value : parseFloat(e.target.value) || 0;
+  S.cen.caixa = otim.caixa; S.cen.descAvista = otim.desc; S.cen.minEntrada = otim.minE; salvar(); calcOtim();
+});
+function calcOtim() {
+  const c = S.cen, o = S.ofertas[otim.idx];
+  const prazos = S.tipo === 'veiculo' ? [12, 24, 36, 48, 60, 72] : [120, 180, 240, 300, 360, 420];
+  const R = Motor.otimizar({ valorBem: c.valorBem, caixa: otim.caixa, renda: c.renda, comprometimento: c.comp / 100, taxaOport: c.oport / 100, descontoAvista: otim.desc / 100, minEntradaPct: otim.minE, prazos, oferta: ofertaMotor(o) });
+  let h = '';
+  if (R.aVista != null) h += `<div class="ok" style="margin-bottom:8px">Comprando <b>à vista</b> o custo é ${brl(R.aVista)} (valor presente = o próprio valor).</div>`;
+  if (!R.viaveis.length) { $('#otimRes').innerHTML = h + `<div class="aviso">Nenhuma combinação cabe no teto de parcela de ${brl(R.teto)} com esse caixa. Aumente o caixa, o prazo máximo ou o limite de comprometimento da renda.</div>`; return; }
+  const b = R.viaveis[0];
+  const cmpVista = R.aVista != null ? (R.aVista < b.res.vp ? 'À vista sai mais barato que financiar, na taxa de oportunidade informada.' : `Financiar sai ${brl(R.aVista - b.res.vp)} mais barato que pagar à vista, em valor presente.`) : '';
+  h += `<div class="kpis"><div class="kpi"><b>${brl(b.entrada)}</b><span>entrada ideal (${(b.entrada / c.valorBem * 100).toFixed(0)}% do bem)</span></div><div class="kpi"><b>${b.prazo} meses</b><span>prazo ideal</span></div><div class="kpi"><b>${brl(b.res.parcelaInicial)}</b><span>parcela inicial</span></div><div class="kpi"><b>${pct(b.res.cetAa)}</b><span>CET a.a.</span></div><div class="kpi"><b>${brl(b.res.vp)}</b><span>valor presente do desembolso</span></div></div>`;
+  h += `<p class="m">Critério: menor valor presente de entrada + parcelas, a ${c.oport.toLocaleString('pt-BR')}% a.m. de oportunidade, respeitando parcela ≤ ${brl(R.teto)} e entrada ≤ caixa. ${cmpVista}</p>`;
+  h += `<h3>Melhores combinações</h3><div class="tabela"><table><tr><th>Entrada</th><th>Prazo</th><th>Parcela inicial</th><th>CET a.a.</th><th>Total pago</th><th>VP</th></tr>${R.viaveis.slice(0, 8).map((x, i) => `<tr${i === 0 ? ' class="melhor"' : ''}><td>${brl(x.entrada)}</td><td>${x.prazo}</td><td>${brl(x.res.parcelaInicial)}</td><td>${pct(x.res.cetAa)}</td><td>${brl(x.res.totalPago)}</td><td>${brl(x.res.vp)}</td></tr>`).join('')}</table></div>`;
+  // mapa de calor: VP por entrada x prazo
+  const ents = [...new Set(R.todas.map((x) => x.entrada))], vps = R.viaveis.map((x) => x.res.vp), mn = Math.min(...vps), mx = Math.max(...vps);
+  h += `<h3>Mapa de valor presente (entrada × prazo)</h3><p class="m">Verde = mais barato. Células apagadas estouram o teto de parcela.</p><div class="tabela"><table class="heat"><tr><th>Entrada \\ prazo</th>${prazos.map((p) => `<th>${p}m</th>`).join('')}</tr>${ents.map((e) => `<tr><td>${brl(e)}</td>${prazos.map((p) => {
+    const x = R.todas.find((y) => y.entrada === e && y.prazo === p);
+    if (!x.cabe) return `<td class="nao">${brl(x.res.vp).replace(/\s/g, ' ')}</td>`;
+    const t = mx > mn ? (x.res.vp - mn) / (mx - mn) : 0, hue = 140 - 140 * t;
+    return `<td class="${x === b ? 'best' : ''}" style="background:hsl(${hue} 55% ${matchMedia('(prefers-color-scheme:dark)').matches ? 24 : 82}%)">${brl(x.res.vp).replace(/\s/g, ' ')}</td>`;
+  }).join('')}</tr>`).join('')}</table></div>`;
+  $('#otimRes').innerHTML = h;
+}
+
+// ---------- Amortização extra e cronograma ----------
+function atualizaExtra() {
+  const sel = $('#extraOferta'), atual = sel.value || '0';
+  sel.innerHTML = S.ofertas.map((o, i) => `<option value="${i}">${o.nome}</option>`).join('');
+  sel.value = +atual < S.ofertas.length ? atual : '0';
+  const o = S.ofertas[+sel.value], base = paraMotor(o);
+  const parc = Motor.simular(base).parcelaInicial;
+  const vals = [0, 0.05, 0.1, 0.25].map((f) => Math.round(parc * f / 50) * 50);
+  const cen = Motor.cenariosExtra(base, [...new Set(vals)]);
+  $('#extraRes').innerHTML = `<table><tr><th>Extra por mês</th><th>Prazo</th><th>Meses a menos</th><th>Total pago</th><th>Economia</th></tr>${cen.map((x) => `<tr><td>${x.extra ? brl(x.extra) : 'sem extra'}</td><td>${x.res.prazoReal} meses</td><td>${x.mesesPoupados}</td><td>${brl(x.res.totalPago)}</td><td>${x.economia > 0 ? brl(x.economia) : '—'}</td></tr>`).join('')}</table>`;
+  const res = Motor.simular(base), rows = res.rows;
+  const linha = (r) => `<tr><td>${r.mes}</td><td>${brl(r.parcela)}</td><td>${brl(r.amort)}</td><td>${brl(r.juros)}</td><td>${brl(r.seguro + r.tarifa)}</td><td>${brl(r.saldoFinal)}</td></tr>`;
+  $('#crono').innerHTML = `<table><tr><th>Mês</th><th>Parcela</th><th>Amortização</th><th>Juros</th><th>Seguro/tarifa</th><th>Saldo devedor</th></tr>${rows.slice(0, 12).map(linha).join('')}</table><p class="m">${rows.length > 12 ? `Mostrando 12 de ${rows.length} meses; o CSV traz todos.` : ''}</p>`;
+}
+$('#extraOferta').onchange = atualizaExtra;
+$('#csv').onclick = () => {
+  const o = S.ofertas[+$('#extraOferta').value], rows = Motor.simular(paraMotor(o)).rows;
+  const f = (n) => n.toFixed(2).replace('.', ',');
+  const csv = 'mes;parcela;amortizacao;juros;seguro;tarifa;saldo\n' + rows.map((r) => [r.mes, f(r.parcela), f(r.amort), f(r.juros), f(r.seguro), f(r.tarifa), f(r.saldoFinal)].join(';')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })); a.download = 'cronograma.csv'; a.click();
+};
+
+montaCenario(); montaOfertas(); calcula();
+</script>
+</main></body></html>
